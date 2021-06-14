@@ -1,27 +1,24 @@
-#include "PacMan.h"
-
+#include "Tron.h"
 #include <assert.h>
 
-#include "FoodPool.h"
-#include "FoodSystem.h"
-#include "GhostsPool.h"
+
 #include "InputHandler.h"
 #include "SDL_macros.h"
 
 using namespace std;
 
-PacMan::PacMan() :
+Tron::Tron() :
 		game_(nullptr), //
 		mngr_(nullptr), //
 		exit_(false) {
 	initGame();
 }
 
-PacMan::~PacMan() {
+Tron::~Tron() {
 	closeGame();
 }
 
-void PacMan::initGame() {
+void Tron::initGame() {
 
 	game_ = SDLGame::init("Stars", _WINDOW_WIDTH_, _WINDOW_HEIGHT_);
 
@@ -29,27 +26,24 @@ void PacMan::initGame() {
 	// we will be using DefFactory for simplicity (e.g., in addEntity,
 	// addComponnet, send)
 	//
-	GhostsPool::init(21);        // for caching ghost entities
-	FoodPool::init(22);          // for caching food entities
 
 	// create the manager
 	mngr_ = new Manager(game_);
 
+
 	// create the systems
-	ghostsSystem_ = mngr_->addSystem<GhostsSystem>();
-	foodSystem_ = mngr_->addSystem<FoodSystem>();
-	pacmanSystem_ = mngr_->addSystem<PacManSystem>();
+	tronSystem_ = mngr_->addSystem<TronSystem>();
 	renderSystem_ = mngr_->addSystem<RenderSystem>();
 	collisionSystem_ = mngr_->addSystem<CollisionSystem>();
 	gameCtrlSystem_ = mngr_->addSystem<GameCtrlSystem>();
 	audioSystem_ = mngr_->addSystem<AudioSystem>();
 }
 
-void PacMan::closeGame() {
+void Tron::closeGame() {
 	delete mngr_;
 }
 
-void PacMan::start() {
+void Tron::start() {
 	exit_ = false;
 	auto ih = InputHandler::instance();
 
@@ -69,9 +63,7 @@ void PacMan::start() {
 		mngr_->refresh();
 
 		gameCtrlSystem_->update();
-		ghostsSystem_->update();
-		pacmanSystem_->update();
-		foodSystem_->update();
+		tronSystem_->update();
 		collisionSystem_->update();
 		renderSystem_->update();
 		audioSystem_->update();

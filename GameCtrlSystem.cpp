@@ -1,11 +1,9 @@
 #include "GameCtrlSystem.h"
 
-#include "FoodSystem.h"
 #include "SDLGame.h"
 #include "Manager.h"
 #include "GameState.h"
-#include "GhostsSystem.h"
-#include "PacManSystem.h"
+#include "TronSystem.h"
 #include "messages.h"
 
 

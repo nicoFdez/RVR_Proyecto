@@ -3,20 +3,18 @@
 #include <vector>
 
 #include "CollisionSystem.h"
-#include "FoodSystem.h"
 #include "GameCtrlSystem.h"
-#include "GhostsSystem.h"
 #include "Manager.h"
-#include "PacManSystem.h"
+#include "TronSystem.h"
 #include "RenderSystem.h"
 #include "SDLGame.h"
 #include "AudioSystem.h"
 
-class PacMan {
+class Tron {
 
 public:
-	PacMan();
-	virtual ~PacMan();
+	Tron();
+	virtual ~Tron();
 
 	// from SDLGame
 	void start();
@@ -32,9 +30,7 @@ private:
 	bool exit_;
 
 	RenderSystem *renderSystem_;
-	GhostsSystem *ghostsSystem_;
-	PacManSystem *pacmanSystem_;
-	FoodSystem   *foodSystem_;
+	TronSystem *tronSystem_;
 	CollisionSystem *collisionSystem_;
 	GameCtrlSystem *gameCtrlSystem_;
 	AudioSystem* audioSystem_;

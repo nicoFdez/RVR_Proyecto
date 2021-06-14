@@ -4,9 +4,9 @@
 #include "Transform.h"
 #include "Entity.h"
 
-class PacManSystem: public System {
+class TronSystem: public System {
 public:
-	PacManSystem();
+	TronSystem();
 	void init() override;
 	void update() override;
 	virtual void receive(const msg::Message& msg) override;

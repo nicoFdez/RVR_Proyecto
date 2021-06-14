@@ -5,7 +5,6 @@
 #include "TexturesManager.h"
 #include "AudioManager.h"
 #include "FontsManager.h"
-#include "RandomNumberGenerator.h"
 #include "InputHandler.h"
 
 #include <string>

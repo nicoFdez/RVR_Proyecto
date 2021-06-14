@@ -37,30 +37,20 @@ void RenderSystem::update() {
 
 	drawFood(gameState_);
 	drawGhosts(gameState_);
-	drawPacMan(gameState_);
+	drawTronPlayers(gameState_);
 	drawState(gameState_);
 
 }
 
-void RenderSystem::drawFood(GameState *gs) {
+
+void RenderSystem::drawTronPlayers(GameState *gs) {
 	if (gs->state_ != GameState::RUNNING)
 		return;
 
-	for (auto &e : mngr_->getGroupEntities(ecs::_grp_Food)) {
-		drawAnimated(e);
-	}
+	drawAnimated(mngr_->getHandler(ecs::_hdlr_PacManEntity));
 }
 
-void RenderSystem::drawGhosts(GameState *gs) {
-	if (gs->state_ != GameState::RUNNING)
-		return;
-
-	for (auto &e : mngr_->getGroupEntities(ecs::_grp_Ghost)) {
-		drawAnimated(e);
-	}
-}
-
-void RenderSystem::drawPacMan(GameState *gs) {
+void RenderSystem::drawMap(GameState *gs) {
 	if (gs->state_ != GameState::RUNNING)
 		return;
 

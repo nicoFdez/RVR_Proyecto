@@ -1,11 +1,11 @@
 #include <iostream>
 
-#include "PacMan.h"
+#include "Tron.h"
 
 using namespace std;
 
 void start() {
-	PacMan g;
+	Tron g;
 	g.start();
 }
 

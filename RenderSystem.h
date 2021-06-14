@@ -11,9 +11,8 @@ public:
 
 private:
 	void drawAnimated(Entity *e);
-	void drawFood(GameState* gs);
-	void drawGhosts(GameState* gs);
-	void drawPacMan(GameState* gs);
+	void drawTronPlayers(GameState* gs);
+	void drawMap(GameState* gs);
 	void drawState(GameState* gs);
 };
 

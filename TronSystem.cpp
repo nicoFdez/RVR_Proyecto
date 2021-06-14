@@ -1,4 +1,4 @@
-#include "PacManSystem.h"
+#include "TronSystem.h"
 
 #include "InputHandler.h"
 #include "Manager.h"
@@ -7,13 +7,13 @@
 #include "GameState.h"
 
 
-PacManSystem::PacManSystem() :
+TronSystem::TronSystem() :
 		System(ecs::_sys_PacMan), ///
 		pacman_(nullptr), //
 		tr_(nullptr) {
 }
 
-void PacManSystem::init() {
+void TronSystem::init() {
 	pacman_ = mngr_->addEntity();
 
 	tr_ = pacman_->addComponent<Transform>();
@@ -30,7 +30,7 @@ void PacManSystem::init() {
 	mngr_->setHandler(ecs::_hdlr_PacManEntity, pacman_);
 }
 
-void PacManSystem::update() {
+void TronSystem::update() {
 
 	auto gameState = mngr_->getHandler(ecs::_hdlr_GameStateEntity)->getComponent<GameState>(ecs::GameState);
 	if ( gameState->state_ != GameState::RUNNING)
@@ -70,7 +70,7 @@ void PacManSystem::update() {
 
 }
 
-void PacManSystem::receive(const msg::Message& msg)
+void TronSystem::receive(const msg::Message& msg)
 {
 	switch (msg.id)
 	{
@@ -83,7 +83,7 @@ void PacManSystem::receive(const msg::Message& msg)
 	}
 }
 
-void PacManSystem::resetPacManPosition() {
+void TronSystem::resetPacManPosition() {
 	tr_->width_ = tr_->height_ = 30.0;
 	tr_->position_ = Vector2D( (game_->getWindowWidth()-tr_->width_)/2,
 			(game_->getWindowHeight()-tr_->height_)/2);
