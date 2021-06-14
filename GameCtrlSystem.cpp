@@ -52,14 +52,14 @@ void GameCtrlSystem::receive(const msg::Message& msg)
 {
 	switch (msg.id)
 	{
-	case msg::_NO_MORE_FOOD: {
-		onNoMoreFood();
-		break;
-	}
-	case msg::_PAC_MAN_DEATH: {
-		onPacManDeath();
-		break;
-	}
+	// case msg::_NO_MORE_FOOD: {
+	// 	onNoMoreFood();
+	// 	break;
+	// }
+	// case msg::_PAC_MAN_DEATH: {
+	// 	onPacManDeath();
+	// 	break;
+	// }
 	default:
 		break;
 	}

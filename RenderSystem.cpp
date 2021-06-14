@@ -35,8 +35,7 @@ void RenderSystem::update() {
 			mngr_->getHandler(ecs::_hdlr_GameStateEntity)->getComponent<GameState>(
 					ecs::GameState);
 
-	drawFood(gameState_);
-	drawGhosts(gameState_);
+
 	drawTronPlayers(gameState_);
 	drawState(gameState_);
 

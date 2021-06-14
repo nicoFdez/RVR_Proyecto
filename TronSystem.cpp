@@ -9,17 +9,23 @@
 
 TronSystem::TronSystem() :
 		System(ecs::_sys_PacMan), ///
-		pacman_(nullptr), //
-		tr_(nullptr) {
+		player1_(nullptr), //
+		player2_(nullptr),
+		tr1_(nullptr) {
+
+			//tamCas = game_->getWindowWidth()/50;
 }
 
 void TronSystem::init() {
-	pacman_ = mngr_->addEntity();
+	player1_ = mngr_->addEntity();
+	//player2_ = mngr_->addEntity();
 
-	tr_ = pacman_->addComponent<Transform>();
+	tr1_ = player1_->addComponent<Transform>();
+	//tr2_ = player2_->addComponent<Transform>();
+
 	resetPacManPosition();
 
-	auto animatedImage = pacman_->addComponent<AnimatedImageComponent>();
+	auto animatedImage = player1_->addComponent<AnimatedImageComponent>();
 	animatedImage->setFrameTime(100);
 	Texture *spritesTex = game_->getTextureMngr()->getTexture(
 			Resources::PacManSprites);
@@ -27,7 +33,7 @@ void TronSystem::init() {
 		animatedImage->addFrame(spritesTex, { i * 128, 0, 128, 128 });
 	}
 
-	mngr_->setHandler(ecs::_hdlr_PacManEntity, pacman_);
+	mngr_->setHandler(ecs::_hdlr_PacManEntity, player1_);
 }
 
 void TronSystem::update() {
@@ -37,35 +43,38 @@ void TronSystem::update() {
 		return;
 
 	auto ih = InputHandler::instance();
-	assert(tr_ != nullptr);
+	assert(tr1_ != nullptr);
 	if (ih->keyDownEvent()) {
 		if (ih->isKeyDown(SDLK_RIGHT)) {
-			tr_->rotation_ = tr_->rotation_ + 10;
-			tr_->velocity_ = tr_->velocity_.rotate(10);
+			tr1_->rotation_ =tr1_->rotation_ + 10; //90
+			tr1_->velocity_ = tr1_->velocity_.rotate(10);
+			
 		} else if (ih->isKeyDown(SDLK_LEFT)) {
-			tr_->rotation_ = tr_->rotation_ - 10;
-			tr_->velocity_ = tr_->velocity_.rotate(-10);
+			tr1_->rotation_ = tr1_->rotation_ - 10; //270
+			tr1_->velocity_ = tr1_->velocity_.rotate(-10);
 		} else if (ih->isKeyDown(SDLK_UP)) {
-			auto nv = Vector2D(0, -1).rotate(tr_->rotation_);
-			tr_->velocity_ = nv * (tr_->velocity_.magnitude() + 0.5);
+			//tr1_->rotation_ = 0;
+			auto nv = Vector2D(0, -1).rotate(tr1_->rotation_);
+			tr1_->velocity_ = nv * (tr1_->velocity_.magnitude() + 0.5);
 		} else if (ih->isKeyDown(SDLK_DOWN)) {
-			auto nv = Vector2D(0, -1).rotate(tr_->rotation_);
-			tr_->velocity_ = nv
-					* std::max(0.0, (tr_->velocity_.magnitude() - 0.5));
+			//tr1_->rotation_ = 180;
+			auto nv = Vector2D(0, -1).rotate(tr1_->rotation_);
+			tr1_->velocity_ = nv
+					* std::max(0.0, (tr1_->velocity_.magnitude() - 0.5));
 		}
 	}
 
 	// move, but stop on borders
-	Vector2D oldPositions = tr_->position_;
+	Vector2D oldPositions = tr1_->position_;
 
-	tr_->position_ = tr_->position_ + tr_->velocity_;
-	int x = tr_->position_.getX();
-	int y = tr_->position_.getY();
+	tr1_->position_ = tr1_->position_ + tr1_->velocity_;
+	int x = tr1_->position_.getX();
+	int y = tr1_->position_.getY();
 
-	if (x <= 0 || x + tr_->width_ >= game_->getWindowWidth() || y <= 0
-			|| y + tr_->height_ >= game_->getWindowHeight()) {
-		tr_->position_ = oldPositions;
-		tr_->velocity_ = Vector2D(0.0, 0.0);
+	if (x <= 0 || x + tr1_->width_ >= game_->getWindowWidth() || y <= 0
+			|| y + tr1_->height_ >= game_->getWindowHeight()) {
+		tr1_->position_ = oldPositions;
+		tr1_->velocity_ = Vector2D(0.0, 0.0);
 	}
 
 }
@@ -84,10 +93,16 @@ void TronSystem::receive(const msg::Message& msg)
 }
 
 void TronSystem::resetPacManPosition() {
-	tr_->width_ = tr_->height_ = 30.0;
-	tr_->position_ = Vector2D( (game_->getWindowWidth()-tr_->width_)/2,
-			(game_->getWindowHeight()-tr_->height_)/2);
-	tr_->velocity_ = Vector2D(0.0, 0.0);
-	tr_->rotation_ = 0.0;
+	tr1_->width_ = tr1_->height_ = 30.0;
+	tr1_->position_ = Vector2D( (game_->getWindowWidth()-tr1_->width_)/2,
+			(game_->getWindowHeight()-tr1_->height_)/2);
+	tr1_->velocity_ = Vector2D(0.0, 0.0);
+	tr1_->rotation_ = 0.0;
+
+	// tr2_->width_ = tr2_->height_ = 30.0;
+	// tr2_->position_ = Vector2D( (game_->getWindowWidth()-tr2_->width_)/4,
+	// 		(game_->getWindowHeight()-tr2_->height_)/4);
+	// tr2_->velocity_ = Vector2D(0.0, 0.0);
+	// tr2_->rotation_ = 0.0;
 
 }

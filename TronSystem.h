@@ -6,6 +6,7 @@
 
 class TronSystem: public System {
 public:
+	//enum estadoCasilla {none, player1, player2};
 	TronSystem();
 	void init() override;
 	void update() override;
@@ -13,7 +14,17 @@ public:
 
 private:
 	void resetPacManPosition();
-	Entity *pacman_;
-	Transform *tr_;
+	Entity *player1_;
+	Entity *player2_;
+
+	//double tamCas;
+	
+	// struct casilla{
+	// 	estadoCasilla miEstado = estadoCasilla::none;
+	// };
+
+	// Vector2D _dirP1;
+	// Vector2D _dirP2;
+	Transform *tr1_;
 };
 

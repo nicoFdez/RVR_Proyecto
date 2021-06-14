@@ -6,7 +6,6 @@
 #include <time.h>
 #include <iostream>
 
-#include "SRandBasedGenerator.h"
 
 
 unique_ptr<SDLGame> SDLGame::instance_;
@@ -65,9 +64,6 @@ void SDLGame::closeSDL() {
 
 void SDLGame::initResources() {
 
-	random_ = new SRandBasedGenerator();
-	random_->init();
-
 	textures_ = new SDLTexturesManager();
 	textures_->init();
 
@@ -103,7 +99,6 @@ void SDLGame::initResources() {
 void SDLGame::closeResources() {
 	delete fonts_;
 	delete textures_;
-	delete random_;
 	delete audio_;
 }
 
