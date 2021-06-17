@@ -17,17 +17,16 @@ public:
 		// text
 		PressEnterToStartANewGame,
 		PressEnterToContinue,
-		GameOver,
+		Player1Wins,
+		Player2Wins
 	};
 
 	enum AudioId : std::size_t {
 		// music
-		PacMan_Intro,
+		Music,
 
 		// sound effects
-		PacMan_Eat,
-		PacMan_Death,
-		PacMan_Won
+		Collision
 	};
 
 	enum FontId : std::size_t {

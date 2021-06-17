@@ -27,14 +27,12 @@ namespace msg {
 		{
 		}
 
-		int winner; //Cuando acaba la ronda, indica si el jugador gano o no
+		int winner;
 	};
 
 	struct StartGameMsg : public Message {
-		StartGameMsg(size_t nGhosts, size_t nCherries) : Message(_GAME_START), nGhosts(nGhosts), nCherries(nCherries)
+		StartGameMsg() : Message(_GAME_START)
 		{
 		}
-
-		size_t nGhosts, nCherries; //el numero de fantasmas | cerezas iniciales
 	};
 }

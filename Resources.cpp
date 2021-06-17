@@ -18,17 +18,16 @@ vector<Resources::TextMsgInfo> Resources::messages_{
 	//
 			{ PressEnterToStartANewGame, "Press ENTER to start a new game", { COLOR(0xaaffffff) }, ARIAL16 }, //
 			{ PressEnterToContinue, "Press ENTER to continue", { COLOR(0xaaffbbff) }, ARIAL24 }, //
-			{ GameOver, "Game Over!", { COLOR(0xffffbbff) }, ARIAL24 } //
+			{ Player1Wins, "Player1 wins!", { COLOR(0x0000ffff) }, ARIAL24 }, //
+			{ Player2Wins, "Player2 wins!", { COLOR(0xff0000ff) }, ARIAL24 } //
 };
 
 vector<Resources::MusicInfo> Resources::musics_{
 	//
-			{ PacMan_Intro, "resources/sound/pacman_intro.wav" }, //
+			{ Music, "resources/sound/music.ogg" }, //
 };
 
 vector<Resources::SoundInfo> Resources::sounds_{
 	//
-			{ PacMan_Eat, "resources/sound/pacman_eat.wav" }, //
-			{ PacMan_Death, "resources/sound/pacman_death.wav" }, //
-			{ PacMan_Won, "resources/sound/pacman_won.wav" }, //
+			{ Collision, "resources/sound/collision.wav" }, //
 };

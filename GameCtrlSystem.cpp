@@ -14,7 +14,6 @@ GameCtrlSystem::GameCtrlSystem() :
 void GameCtrlSystem::init() {
 	gameStateEntity_ = mngr_->addEntity();
 	gameState_ = gameStateEntity_->addComponent<GameState>();
-	//mngr_->setHandler(ecs::_hdlr_GameStateEntity, e);
 	mngr_->send<msg::Message>(msg::_ARRIVED_TO_MENU);
 }
 
@@ -28,13 +27,11 @@ void GameCtrlSystem::update() {
 		switch (gameState_->state_) {
 		case GameState::READY:
 			gameState_->state_ = GameState::RUNNING;
-			mngr_->send<msg::StartGameMsg>(2, 10); //aviso al resto de sistemas
+			mngr_->send<msg::StartGameMsg>(); //aviso al resto de sistemas
 			break;
 		case GameState::OVER:
 			gameState_->state_ = GameState::READY;
-			gameState_->score_ = 0;
-			gameState_->won_ = false;
-
+			mngr_->getSystem<TronSystem>(ecs::SysId::_sys_Tron)->reset();
 			mngr_->send<msg::Message>(msg::_ARRIVED_TO_MENU); //aviso al resto de sistemas
 			break;
 		default:
@@ -48,27 +45,12 @@ void GameCtrlSystem::receive(const msg::Message& msg)
 {
 	switch (msg.id)
 	{
-		// case msg::_NO_MORE_FOOD: {
-		// 	onNoMoreFood();
-		// 	break;
-		// }
-		// case msg::_PAC_MAN_DEATH: {
-		// 	onPacManDeath();
-		// 	break;
-		// }
+		 case msg::_GAME_OVER: {
+			gameState_->state_ = GameState::OVER;
+			gameState_->winner_ = static_cast<const msg::GameOverMsg&>(msg).winner;
+		 	break;
+		 }
 	default:
 		break;
 	}
-}
-
-void GameCtrlSystem::onPacManDeath() {
-	gameState_->state_ = GameState::OVER;
-	gameState_->won_ = false;
-	mngr_->send<msg::GameOverMsg>(gameState_->won_);
-}
-
-void GameCtrlSystem::onNoMoreFood() {
-	gameState_->state_ = GameState::OVER;
-	gameState_->won_ = true;
-	mngr_->send<msg::GameOverMsg>(gameState_->won_);
 }

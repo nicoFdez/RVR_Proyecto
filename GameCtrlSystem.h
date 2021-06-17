@@ -15,8 +15,6 @@ public:
 	Entity* getGameStateEntity() { return gameStateEntity_; }
 
 private:
-	void onPacManDeath();
-	void onNoMoreFood();
 	Entity* gameStateEntity_;
 	GameState* gameState_;
 };

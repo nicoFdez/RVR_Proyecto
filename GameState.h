@@ -9,13 +9,11 @@ struct GameState : Component {
 	GameState() :
 		Component(ecs::GameState), //
 		state_(READY), //
-		won_(false),
-		score_(0)//
+		winner_(0)
 	{
 	}
 
 	State state_;
-	bool won_; // true means packman won 0 packman, 1
-	int score_;
+	int winner_;
 };
 

@@ -16,7 +16,7 @@ TronSystem::TronSystem() :
 }
 
 void TronSystem::init() {
-	movementTimer = 400;
+	movementTimer = 200;
 	lastTickMoved = game_->getTime();
 	tamCas = 10;
 
@@ -35,7 +35,7 @@ void TronSystem::init() {
 	tr1_ = player1_->addComponent<Transform>();
 	tr2_ = player2_->addComponent<Transform>();
 
-	resetPacManPosition();
+	reset();
 
 	auto animatedImage = player1_->addComponent<AnimatedImageComponent>();
 	animatedImage->setFrameTime(100);
@@ -75,7 +75,7 @@ void TronSystem::update() {
 		//Update el player 2
 		finalPosPlayer = updatePlayerPos(tr2_, _dirP2);
 		if (checkCollision(finalPosPlayer)) {
-			mngr_->send<msg::GameOverMsg>(1); //aviso al resto de sistemas
+			mngr_->send<msg::GameOverMsg>(1);
 		}
 		else
 			encasillado[finalPosPlayer.getX()][finalPosPlayer.getY()].miEstado = estadoCasilla::player2;
@@ -143,7 +143,7 @@ void TronSystem::receive(const msg::Message& msg)
 	switch (msg.id)
 	{
 	case msg::_GAME_START: {
-		resetPacManPosition();
+		reset();
 		break;
 	}
 	default:
@@ -151,7 +151,7 @@ void TronSystem::receive(const msg::Message& msg)
 	}
 }
 
-void TronSystem::resetPacManPosition() {
+void TronSystem::reset() {
 	//Tamaño
 	tr1_->width_ = tr1_->height_ = 10.0;
 

@@ -24,8 +24,8 @@ public:
 	Entity* getPlayer2() { return player2_; }
 
 	const vector<vector<casilla>>& getTronMap() { return encasillado; }
+	void reset();
 private:
-	void resetPacManPosition();
 	Entity* player1_;
 	Entity* player2_;
 

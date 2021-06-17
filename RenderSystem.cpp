@@ -47,7 +47,6 @@ void RenderSystem::update() {
 void RenderSystem::drawTronPlayers(GameState* gs) {
 	if (gs->state_ != GameState::RUNNING)
 		return;
-	//mngr_->getSystem<TronSystem>(ecs::SysId::_sys_Tron);
 
 	drawAnimated(mngr_->getSystem<TronSystem>(ecs::SysId::_sys_Tron)->getPlayer1());
 	drawAnimated(mngr_->getSystem<TronSystem>(ecs::SysId::_sys_Tron)->getPlayer2());
@@ -74,11 +73,6 @@ void RenderSystem::drawMap(GameState* gs) {
 }
 
 void RenderSystem::drawState(GameState* gs) {
-	// score
-	Texture scoreMsg(game_->getRenderer(), std::to_string(gs->score_),
-		game_->getFontMngr()->getFont(Resources::ARIAL24),
-		{ COLOR(0xff0000ff) });
-	scoreMsg.render(game_->getWindowWidth() / 2 - scoreMsg.getWidth() / 2, 10);
 
 	if (gs->state_ == GameState::RUNNING)
 		return;
@@ -99,7 +93,12 @@ void RenderSystem::drawState(GameState* gs) {
 		y = (game_->getWindowHeight() - toContMsg->getHeight()) / 2;
 		toContMsg->render(x, y);
 
-		auto gameOverMsg = game_->getTextureMngr()->getTexture(Resources::GameOver);
+		int winner = gs->winner_;
+		Texture* gameOverMsg;
+		if (winner == 1) {
+			gameOverMsg = game_->getTextureMngr()->getTexture(Resources::Player1Wins);
+		}
+		else gameOverMsg = game_->getTextureMngr()->getTexture(Resources::Player2Wins);
 		x = (game_->getWindowWidth() - gameOverMsg->getWidth()) / 2;
 		y = (game_->getWindowHeight() - gameOverMsg->getHeight()) / 2 - 50;
 		gameOverMsg->render(x, y);
@@ -107,6 +106,6 @@ void RenderSystem::drawState(GameState* gs) {
 		break;
 	}
 	default:
-		assert(false); // should be unreachable;
+		assert(false);
 	}
 }
