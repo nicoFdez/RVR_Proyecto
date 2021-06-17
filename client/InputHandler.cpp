@@ -5,6 +5,7 @@ unique_ptr<InputHandler> InputHandler::instance_;
 InputHandler::InputHandler() {
 	clearState();
 	kbState_ = SDL_GetKeyboardState(0);
+	//SDL_EnableKeyRepeat(0,0);
 }
 
 InputHandler::~InputHandler() {
@@ -19,7 +20,9 @@ void InputHandler::update() {
 	while (SDL_PollEvent(&event)) {
 		switch (event.type) {
 		case SDL_KEYDOWN:
-			onKeyDown(event);
+		//Si no se ha repetido 
+			if(event.key.repeat == 0 )
+				onKeyDown(event);
 			break;
 		case SDL_KEYUP:
 			onKeyUp(event);
@@ -45,4 +48,12 @@ void InputHandler::clearState() {
 	for (int i = 0; i < 3; i++) {
 		mbState_[i] = false;
 	}
+}
+
+void InputHandler::onKeyDown(SDL_Event& event){
+	
+	isKeyDownEvent_ = true;
+	cout<<"Hola he sido pulsado\n";
+	// kbState_ = SDL_GetKeyboardState(0);
+	
 }

@@ -82,10 +82,8 @@ private:
 	InputHandler();
 	void clearState();
 
-	inline void onKeyDown(SDL_Event &event) {
-		isKeyDownEvent_ = true;
-		// kbState_ = SDL_GetKeyboardState(0);
-	}
+	void onKeyDown(SDL_Event &event) ;
+
 	inline void onKeyUp(SDL_Event &event) {
 		isKeyUpEvent_ = true;
 		// kbState_ = SDL_GetKeyboardState(0);
