@@ -85,7 +85,6 @@ void TronSystem::update() {
 void TronSystem::inputManagement()
 {
 	auto ih = InputHandler::instance();
-	assert(tr1_ != nullptr);
 	if (ih->keyDownEvent()) {
 		if (ih->isKeyDown(SDLK_RIGHT)) {
 			tr1_->rotation_ = 90;
@@ -152,7 +151,7 @@ void TronSystem::receive(const msg::Message& msg)
 }
 
 void TronSystem::reset() {
-	//Tamaño
+	//Tamaï¿½o
 	tr1_->width_ = tr1_->height_ = 10.0;
 
 	//Posicion en la esquina superior casilla

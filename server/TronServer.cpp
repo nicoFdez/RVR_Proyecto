@@ -1,17 +1,18 @@
+#include "Chat.h"
 #include <iostream>
-
 #include "Tron.h"
-
-using namespace std;
 
 void start() {
 	Tron g;
 	g.start();
 }
 
-int main(int ac, char **av) {
+int main(int argc, char **argv)
+{
+    ChatServer es(argv[1], argv[2]);
+	es.listen_clients();
 
-	try {
+    try {
 		start();
 	} catch (std::string &e) { // catch errors thrown as strings
 		cerr << e << endl;
