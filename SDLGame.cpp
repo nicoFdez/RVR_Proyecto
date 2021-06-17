@@ -18,8 +18,8 @@ SDLGame::SDLGame(string windowTitle, int width, int height) :
 }
 
 SDLGame::~SDLGame() {
-	closeResources();
 	closeSDL();
+	closeResources();
 }
 
 void SDLGame::initSDL() {
@@ -53,11 +53,15 @@ void SDLGame::initSDL() {
 
 void SDLGame::closeSDL() {
 
-	SDL_DestroyRenderer(renderer_);
-	renderer_ = nullptr;
+	if(renderer_ != nullptr){
+		//SDL_DestroyRenderer(renderer_);
+		renderer_ = nullptr;
+	}
 
-	SDL_DestroyWindow(window_);
-	window_ = nullptr;
+	if(window_ != nullptr){
+		SDL_DestroyWindow(window_);
+		window_ = nullptr;
+	}
 
 	SDL_Quit();
 }
