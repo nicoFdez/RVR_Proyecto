@@ -4,7 +4,7 @@
 
 struct GameState;
 
-class GameCtrlSystem: public System {
+class GameCtrlSystem : public System {
 public:
 
 	GameCtrlSystem();
@@ -12,12 +12,11 @@ public:
 	void init() override;
 	void update() override;
 	virtual void receive(const msg::Message& msg) override;
+	Entity* getGameStateEntity() { return gameStateEntity_; }
 
 private:
 	void onPacManDeath();
 	void onNoMoreFood();
-
-	GameState *gameState_;
-
+	Entity* gameStateEntity_;
+	GameState* gameState_;
 };
-

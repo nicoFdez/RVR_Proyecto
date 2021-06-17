@@ -14,15 +14,14 @@
 class Manager;
 
 class Entity {
-
 	// defining a type just for brevity
-	using uptr_cmp = std::unique_ptr<Component,std::function<void(Component*)>>;
+	using uptr_cmp = std::unique_ptr<Component, std::function<void(Component*)>>;
 
 public:
 	Entity() :
-			game_(SDLGame::instance()), //
-			mngr_(nullptr), //
-			active_(true) {
+		game_(SDLGame::instance()), //
+		mngr_(nullptr), //
+		active_(true) {
 	}
 
 	virtual ~Entity() {
@@ -32,7 +31,7 @@ public:
 		return mngr_;
 	}
 
-	inline void setEntityMngr(Manager *mngr) {
+	inline void setEntityMngr(Manager* mngr) {
 		mngr_ = mngr;
 	}
 
@@ -56,10 +55,9 @@ public:
 
 	template<typename T, typename FT = DefFactory<T>, typename ... Targs>
 	inline T* addComponent(Targs &&...args) {
-
 		// create the actual component ...
-		T *c = FT::construct(std::forward<Targs>(args)...);
-		uptr_cmp uPtr(c, [](Component *p) {
+		T* c = FT::construct(std::forward<Targs>(args)...);
+		uptr_cmp uPtr(c, [](Component* p) {
 			FT::destroy(static_cast<T*>(p));
 		});
 
@@ -71,32 +69,14 @@ public:
 
 	template<typename T>
 	inline void removeComponent(ecs::CmpIdType id) {
-		 cmpArray_[id] = nullptr;
-	}
-
-	// defined in CPP since it access the manager
-	void addToGroup(ecs::GrpIdType id);
-
-	inline void removeFromGroup(ecs::GrpIdType grpId) {
-		groups_[grpId] = false;
-	}
-
-	inline void resetGroups() {
-		groups_.reset();
-	}
-
-	inline bool hasGroup(ecs::GrpIdType grpId) {
-		return groups_[grpId];
+		cmpArray_[id] = nullptr;
 	}
 
 private:
-	SDLGame *game_;
-	Manager *mngr_;
+	SDLGame* game_;
+	Manager* mngr_;
 
 	std::array<uptr_cmp, ecs::maxComponents> cmpArray_ = { };
-	std::bitset<ecs::maxGroups> groups_;
-
 
 	bool active_;
 };
-

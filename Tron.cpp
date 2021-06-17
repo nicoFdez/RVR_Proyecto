@@ -1,16 +1,15 @@
 #include "Tron.h"
 #include <assert.h>
 
-
 #include "InputHandler.h"
 #include "SDL_macros.h"
 
 using namespace std;
 
 Tron::Tron() :
-		game_(nullptr), //
-		mngr_(nullptr), //
-		exit_(false) {
+	game_(nullptr), //
+	mngr_(nullptr), //
+	exit_(false) {
 	initGame();
 }
 
@@ -19,7 +18,6 @@ Tron::~Tron() {
 }
 
 void Tron::initGame() {
-
 	game_ = SDLGame::init("Stars", _WINDOW_WIDTH_, _WINDOW_HEIGHT_);
 
 	// Initialize the pool, for the rest of factories it is not needed,
@@ -30,11 +28,9 @@ void Tron::initGame() {
 	// create the manager
 	mngr_ = new Manager(game_);
 
-
 	// create the systems
 	tronSystem_ = mngr_->addSystem<TronSystem>();
 	renderSystem_ = mngr_->addSystem<RenderSystem>();
-	collisionSystem_ = mngr_->addSystem<CollisionSystem>();
 	gameCtrlSystem_ = mngr_->addSystem<GameCtrlSystem>();
 	audioSystem_ = mngr_->addSystem<AudioSystem>();
 }
@@ -64,7 +60,6 @@ void Tron::start() {
 
 		gameCtrlSystem_->update();
 		tronSystem_->update();
-		collisionSystem_->update();
 		renderSystem_->update();
 		audioSystem_->update();
 
@@ -78,4 +73,3 @@ void Tron::start() {
 			SDL_Delay(10 - frameTime);
 	}
 }
-

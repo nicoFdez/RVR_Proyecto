@@ -6,32 +6,28 @@
 #include "TronSystem.h"
 #include "messages.h"
 
-
 GameCtrlSystem::GameCtrlSystem() :
-		System(ecs::_sys_GameCtrl), //
-		gameState_(nullptr) {
+	System(ecs::_sys_GameCtrl), //
+	gameState_(nullptr) {
 }
 
-
 void GameCtrlSystem::init() {
-	Entity *e = mngr_->addEntity();
-	gameState_ = e->addComponent<GameState>();
-	mngr_->setHandler(ecs::_hdlr_GameStateEntity, e);
+	gameStateEntity_ = mngr_->addEntity();
+	gameState_ = gameStateEntity_->addComponent<GameState>();
+	//mngr_->setHandler(ecs::_hdlr_GameStateEntity, e);
 	mngr_->send<msg::Message>(msg::_ARRIVED_TO_MENU);
 }
 
 void GameCtrlSystem::update() {
-
-	if ( gameState_->state_ == GameState::RUNNING )
+	if (gameState_->state_ == GameState::RUNNING)
 		return;
 
 	auto ih = game_->getInputHandler();
 
-	if ( ih->keyDownEvent() && ih->isKeyDown(SDLK_RETURN)) {
-		switch ( gameState_->state_) {
+	if (ih->keyDownEvent() && ih->isKeyDown(SDLK_RETURN)) {
+		switch (gameState_->state_) {
 		case GameState::READY:
 			gameState_->state_ = GameState::RUNNING;
-
 			mngr_->send<msg::StartGameMsg>(2, 10); //aviso al resto de sistemas
 			break;
 		case GameState::OVER:
@@ -52,14 +48,14 @@ void GameCtrlSystem::receive(const msg::Message& msg)
 {
 	switch (msg.id)
 	{
-	// case msg::_NO_MORE_FOOD: {
-	// 	onNoMoreFood();
-	// 	break;
-	// }
-	// case msg::_PAC_MAN_DEATH: {
-	// 	onPacManDeath();
-	// 	break;
-	// }
+		// case msg::_NO_MORE_FOOD: {
+		// 	onNoMoreFood();
+		// 	break;
+		// }
+		// case msg::_PAC_MAN_DEATH: {
+		// 	onPacManDeath();
+		// 	break;
+		// }
 	default:
 		break;
 	}
