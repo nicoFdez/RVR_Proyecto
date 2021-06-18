@@ -56,6 +56,8 @@ void Tron::start() {
 				Key exit;
 				exit.key = Key::keyType::ESC;
 				//Mandar mensaje de terminar
+				mngr_->getSystem<SocketSystem>(ecs::SysId::_sys_Socket)->sendToServer(exit);	
+
 				break;
 			}
 		}

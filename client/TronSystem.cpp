@@ -7,6 +7,7 @@
 #include "GameState.h"
 #include "SDL_macros.h"
 #include "GameCtrlSystem.h"
+#include "SocketSystem.h"
 
 TronSystem::TronSystem() :
 	System(ecs::_sys_Tron), ///
@@ -100,8 +101,10 @@ void TronSystem::inputManagement()
 		else if (ih->isKeyDown(SDLK_DOWN)) {
 			lastKeyPressed = Key::keyType::DOWN;
 		}
+		//Mandar mensaje con tecla pulsada
+		Key message(lastKeyPressed);
+ 		mngr_->getSystem<SocketSystem>(ecs::SysId::_sys_Socket)->sendToServer(message);	
 	}
-	//Mandar mensaje con tecla pulsada
 }
 
 Vector2D TronSystem::updatePlayerPos(Transform* trPlayer, Vector2D dirPlayer)
@@ -114,7 +117,6 @@ Vector2D TronSystem::updatePlayerPos(Transform* trPlayer, Vector2D dirPlayer)
 	if (x < 0 || x + trPlayer->width_ > game_->getWindowWidth() || y < 0
 		|| y + trPlayer->height_ > game_->getWindowHeight()) {
 		trPlayer->position_ = oldPositions;
-		trPlayer->velocity_ = Vector2D(0.0, 0.0);
 	}
 	//MarcarCasilla del player 1
 	int indiceX = trPlayer->position_.getX() / tamCas;
@@ -152,7 +154,6 @@ void TronSystem::reset() {
 	int indiceY = tr1_->position_.getY() / tamCas;
 	tr1_->position_ = Vector2D(indiceX * tamCas, indiceY * tamCas);
 	//Vel
-	tr1_->velocity_ = Vector2D(0.0, 0.0);
 	tr1_->rotation_ = 0.0;
 	_dirP1 = Vector2D(1, 0);
 
@@ -164,7 +165,6 @@ void TronSystem::reset() {
 	indiceY = tr2_->position_.getY() / tamCas;
 
 	tr2_->position_ = Vector2D(indiceX * tamCas, indiceY * tamCas);
-	tr2_->velocity_ = Vector2D(0.0, 0.0);
 	tr2_->rotation_ = 0.0;
 	_dirP2 = Vector2D(-1, 0);
 
@@ -175,5 +175,24 @@ void TronSystem::reset() {
 		for (int j = 0; j < encasillado.size(); j++) {
 			encasillado[i][j].miEstado = estadoCasilla::none;
 		}
+	}
+}
+
+void TronSystem::setEncasillado(vector<vector<int>> mapa){
+
+	for(int i=0;i<mapa.size();i++){
+		for(int j=0;j<mapa.size();j++){
+			encasillado[i][j].miEstado = (estadoCasilla)mapa[i][j];
+		}
+	}
+
+}
+
+void TronSystem::setPlayerTransform(int id, Transform tr){
+	if(id == 1){
+		*tr1_ = tr;
+	}
+	else if(id == 2){
+		*tr2_ = tr;
 	}
 }

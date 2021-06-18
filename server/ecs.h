@@ -23,6 +23,7 @@ namespace ecs {
 		_sys_Tron,
 		_sys_Render,
 		_sys_Audio,
+		_sys_Socket,
 		//
 		// don't touch the rest of this enum, it is to identify the max
 		// number of systems

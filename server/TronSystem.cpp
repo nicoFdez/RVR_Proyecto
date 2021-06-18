@@ -7,6 +7,7 @@
 #include "GameState.h"
 #include "SDL_macros.h"
 #include "GameCtrlSystem.h"
+#include "SocketSystem.h"
 
 TronSystem::TronSystem() :
 	System(ecs::_sys_Tron), ///
@@ -19,6 +20,7 @@ void TronSystem::init() {
 	movementTimer = 200;
 	lastTickMoved = game_->getTime();
 	tamCas = 10;
+	lastKeyPressed = Key::keyType::NONE;
 
 	encasillado = vector <vector<casilla>>(game_->getWindowWidth() / tamCas, vector<casilla>(game_->getWindowHeight() / tamCas, casilla()));
 
@@ -84,32 +86,24 @@ void TronSystem::update() {
 
 void TronSystem::inputManagement()
 {
+	lastKeyPressed = Key::keyType::NONE;
 	auto ih = InputHandler::instance();
 	if (ih->keyDownEvent()) {
 		if (ih->isKeyDown(SDLK_RIGHT)) {
-			tr1_->rotation_ = 90;
-			tr2_->rotation_ = 90;
-			_dirP1.setX(1);			_dirP1.setY(0);
-			_dirP2.setX(1);			_dirP2.setY(0);
+			lastKeyPressed = Key::keyType::RIGHT;
 		}
 		else if (ih->isKeyDown(SDLK_LEFT)) {
-			tr1_->rotation_ = 270;
-			tr2_->rotation_ = 270;
-			_dirP1.setX(-1);			_dirP1.setY(0);
-			_dirP2.setX(-1);			_dirP2.setY(0);
+			lastKeyPressed = Key::keyType::LEFT;
 		}
 		else if (ih->isKeyDown(SDLK_UP)) {
-			tr1_->rotation_ = 0;
-			tr2_->rotation_ = 0;
-			_dirP1.setX(0);			_dirP1.setY(-1);
-			_dirP2.setX(0);			_dirP2.setY(-1);
+			lastKeyPressed = Key::keyType::UP;
 		}
 		else if (ih->isKeyDown(SDLK_DOWN)) {
-			tr1_->rotation_ = 180;
-			tr2_->rotation_ = 180;
-			_dirP1.setX(0);			_dirP1.setY(1);
-			_dirP2.setX(0);			_dirP2.setY(1);
+			lastKeyPressed = Key::keyType::DOWN;
 		}
+		//Mandar mensaje con tecla pulsada
+		Key message(lastKeyPressed);
+ 		mngr_->getSystem<SocketSystem>(ecs::SysId::_sys_Socket)->sendToServer(message);	
 	}
 }
 
@@ -123,7 +117,6 @@ Vector2D TronSystem::updatePlayerPos(Transform* trPlayer, Vector2D dirPlayer)
 	if (x < 0 || x + trPlayer->width_ > game_->getWindowWidth() || y < 0
 		|| y + trPlayer->height_ > game_->getWindowHeight()) {
 		trPlayer->position_ = oldPositions;
-		trPlayer->velocity_ = Vector2D(0.0, 0.0);
 	}
 	//MarcarCasilla del player 1
 	int indiceX = trPlayer->position_.getX() / tamCas;
@@ -161,7 +154,6 @@ void TronSystem::reset() {
 	int indiceY = tr1_->position_.getY() / tamCas;
 	tr1_->position_ = Vector2D(indiceX * tamCas, indiceY * tamCas);
 	//Vel
-	tr1_->velocity_ = Vector2D(0.0, 0.0);
 	tr1_->rotation_ = 0.0;
 	_dirP1 = Vector2D(1, 0);
 
@@ -173,7 +165,6 @@ void TronSystem::reset() {
 	indiceY = tr2_->position_.getY() / tamCas;
 
 	tr2_->position_ = Vector2D(indiceX * tamCas, indiceY * tamCas);
-	tr2_->velocity_ = Vector2D(0.0, 0.0);
 	tr2_->rotation_ = 0.0;
 	_dirP2 = Vector2D(-1, 0);
 
@@ -184,5 +175,24 @@ void TronSystem::reset() {
 		for (int j = 0; j < encasillado.size(); j++) {
 			encasillado[i][j].miEstado = estadoCasilla::none;
 		}
+	}
+}
+
+void TronSystem::setEncasillado(vector<vector<int>> mapa){
+
+	for(int i=0;i<mapa.size();i++){
+		for(int j=0;j<mapa.size();j++){
+			encasillado[i][j].miEstado = (estadoCasilla)mapa[i][j];
+		}
+	}
+
+}
+
+void TronSystem::setPlayerTransform(int id, Transform tr){
+	if(id == 1){
+		*tr1_ = tr;
+	}
+	else if(id == 2){
+		*tr2_ = tr;
 	}
 }

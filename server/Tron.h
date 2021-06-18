@@ -8,17 +8,18 @@
 #include "RenderSystem.h"
 #include "SDLGame.h"
 #include "AudioSystem.h"
+#include "SocketSystem.h"
 
 class Tron {
 public:
-	Tron();
+	Tron(const char * s, const char * p);
 	virtual ~Tron();
 
 	// from SDLGame
 	void start();
 
 private:
-	void initGame();
+	void initGame(const char * s, const char * p);
 	void closeGame();
 
 	SDLGame* game_;
@@ -29,6 +30,7 @@ private:
 	TronSystem* tronSystem_;
 	GameCtrlSystem* gameCtrlSystem_;
 	AudioSystem* audioSystem_;
+	SocketSystem* socketSystem_;
 
 	const static int _WINDOW_WIDTH_ = 500;
 	const static int _WINDOW_HEIGHT_ = 500;

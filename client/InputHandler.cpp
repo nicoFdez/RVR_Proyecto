@@ -53,7 +53,6 @@ void InputHandler::clearState() {
 void InputHandler::onKeyDown(SDL_Event& event){
 	
 	isKeyDownEvent_ = true;
-	cout<<"Hola he sido pulsado\n";
 	// kbState_ = SDL_GetKeyboardState(0);
 	
 }

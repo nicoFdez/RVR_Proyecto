@@ -1,19 +1,20 @@
+#include <thread>
 #include "Chat.h"
-#include <iostream>
 #include "Tron.h"
 
-void start() {
-	Tron g;
+void start(const char * s, const char * p) {
+	Tron g(s, p);
 	g.start();
 }
 
 int main(int argc, char **argv)
 {
-    ChatServer es(argv[1], argv[2]);
+    //ChatServer es(argv[1], argv[2]);
 	//es.listen_clients();
 
     try {
-		start();
+        start(argv[1], argv[2]);
+
 	} catch (std::string &e) { // catch errors thrown as strings
 		cerr << e << endl;
 	} catch (const char *e) { // catch errors thrown as char*
@@ -26,3 +27,4 @@ int main(int argc, char **argv)
 
 	return 0;
 }
+

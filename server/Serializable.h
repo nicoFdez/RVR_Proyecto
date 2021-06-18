@@ -2,6 +2,7 @@
 #define SERIALIZABLE_H_
 
 #include <stdlib.h>
+#include <cstring>
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
@@ -21,6 +22,7 @@
 class Serializable
 {
 public:
+    //enum MessageType { InicioPartida, Partida, FinalPartida, Input};
 
     Serializable():_size(0), _data(0){};
 
@@ -98,7 +100,8 @@ public:
         DOWN  = 2,
         UP  = 3,
         ESC  = 4,
-        ENTER  = 5
+        ENTER  = 5,
+        NONE = 6
     };
 
     Key(){};

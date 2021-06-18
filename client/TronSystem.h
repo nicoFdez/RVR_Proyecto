@@ -26,6 +26,11 @@ public:
 
 	const vector<vector<casilla>>& getTronMap() { return encasillado; }
 	void reset();
+
+	void setEncasillado(vector<vector<int>> mapa);
+
+	void setPlayerTransform(int id, Transform tr);
+
 private:
 	Entity* player1_;
 	Entity* player2_;

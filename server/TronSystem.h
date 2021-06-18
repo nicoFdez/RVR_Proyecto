@@ -4,6 +4,7 @@
 #include "Transform.h"
 #include "Entity.h"
 #include "ImageComponent.h"
+#include "Serializable.h"
 
 class TronSystem : public System {
 public:
@@ -25,18 +26,25 @@ public:
 
 	const vector<vector<casilla>>& getTronMap() { return encasillado; }
 	void reset();
+
+	void setEncasillado(vector<vector<int>> mapa);
+
+	void setPlayerTransform(int id, Transform tr);
+
 private:
 	Entity* player1_;
 	Entity* player2_;
-
-	double tamCas;
-
-	vector<vector<casilla>> encasillado;
 
 	Vector2D _dirP1;
 	Vector2D _dirP2;
 	Transform* tr1_;
 	Transform* tr2_;
+
+	double tamCas;
+
+	Key::keyType lastKeyPressed;
+
+	vector<vector<casilla>> encasillado;
 
 	double movementTimer;
 	double lastTickMoved;
