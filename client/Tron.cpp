@@ -6,18 +6,18 @@
 
 using namespace std;
 
-Tron::Tron() :
+Tron::Tron(const char * s, const char * p) :
 	game_(nullptr), //
 	mngr_(nullptr), //
 	exit_(false) {
-	initGame();
+	initGame(s, p);
 }
 
 Tron::~Tron() {
 	closeGame();
 }
 
-void Tron::initGame() {
+void Tron::initGame(const char * s, const char * p) {
 	game_ = SDLGame::init("Stars", _WINDOW_WIDTH_, _WINDOW_HEIGHT_);
 
 	// Initialize the pool, for the rest of factories it is not needed,
@@ -33,6 +33,7 @@ void Tron::initGame() {
 	renderSystem_ = mngr_->addSystem<RenderSystem>();
 	gameCtrlSystem_ = mngr_->addSystem<GameCtrlSystem>();
 	audioSystem_ = mngr_->addSystem<AudioSystem>();
+	socketSystem_ = mngr_->addSystem<SocketSystem>(s, p);
 }
 
 void Tron::closeGame() {
@@ -52,6 +53,9 @@ void Tron::start() {
 		if (ih->keyDownEvent()) {
 			if (ih->isKeyDown(SDLK_ESCAPE)) {
 				exit_ = true;
+				Key exit;
+				exit.key = Key::keyType::ESC;
+				//Mandar mensaje de terminar
 				break;
 			}
 		}
@@ -62,6 +66,7 @@ void Tron::start() {
 		tronSystem_->update();
 		renderSystem_->update();
 		audioSystem_->update();
+		socketSystem_->update();
 
 		// this is needed for sending the messages!
 		mngr_->flushMessages();

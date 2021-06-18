@@ -19,6 +19,7 @@ void TronSystem::init() {
 	movementTimer = 200;
 	lastTickMoved = game_->getTime();
 	tamCas = 10;
+	lastKeyPressed = Key::keyType::NONE;
 
 	encasillado = vector <vector<casilla>>(game_->getWindowWidth() / tamCas, vector<casilla>(game_->getWindowHeight() / tamCas, casilla()));
 
@@ -84,33 +85,23 @@ void TronSystem::update() {
 
 void TronSystem::inputManagement()
 {
+	lastKeyPressed = Key::keyType::NONE;
 	auto ih = InputHandler::instance();
 	if (ih->keyDownEvent()) {
 		if (ih->isKeyDown(SDLK_RIGHT)) {
-			tr1_->rotation_ = 90;
-			tr2_->rotation_ = 90;
-			_dirP1.setX(1);			_dirP1.setY(0);
-			_dirP2.setX(1);			_dirP2.setY(0);
+			lastKeyPressed = Key::keyType::RIGHT;
 		}
 		else if (ih->isKeyDown(SDLK_LEFT)) {
-			tr1_->rotation_ = 270;
-			tr2_->rotation_ = 270;
-			_dirP1.setX(-1);			_dirP1.setY(0);
-			_dirP2.setX(-1);			_dirP2.setY(0);
+			lastKeyPressed = Key::keyType::LEFT;
 		}
 		else if (ih->isKeyDown(SDLK_UP)) {
-			tr1_->rotation_ = 0;
-			tr2_->rotation_ = 0;
-			_dirP1.setX(0);			_dirP1.setY(-1);
-			_dirP2.setX(0);			_dirP2.setY(-1);
+			lastKeyPressed = Key::keyType::UP;
 		}
 		else if (ih->isKeyDown(SDLK_DOWN)) {
-			tr1_->rotation_ = 180;
-			tr2_->rotation_ = 180;
-			_dirP1.setX(0);			_dirP1.setY(1);
-			_dirP2.setX(0);			_dirP2.setY(1);
+			lastKeyPressed = Key::keyType::DOWN;
 		}
 	}
+	//Mandar mensaje con tecla pulsada
 }
 
 Vector2D TronSystem::updatePlayerPos(Transform* trPlayer, Vector2D dirPlayer)

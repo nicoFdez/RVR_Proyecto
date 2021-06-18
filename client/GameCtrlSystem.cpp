@@ -5,6 +5,7 @@
 #include "GameState.h"
 #include "TronSystem.h"
 #include "messages.h"
+#include "Serializable.h"
 
 GameCtrlSystem::GameCtrlSystem() :
 	System(ecs::_sys_GameCtrl), //
@@ -24,20 +25,22 @@ void GameCtrlSystem::update() {
 	auto ih = game_->getInputHandler();
 
 	if (ih->keyDownEvent() && ih->isKeyDown(SDLK_RETURN)) {
-		switch (gameState_->state_) {
-		case GameState::READY:
-			gameState_->state_ = GameState::RUNNING;
-			mngr_->send<msg::StartGameMsg>(); //aviso al resto de sistemas
-			break;
-		case GameState::OVER:
-			gameState_->state_ = GameState::READY;
-			mngr_->getSystem<TronSystem>(ecs::SysId::_sys_Tron)->reset();
-			mngr_->send<msg::Message>(msg::_ARRIVED_TO_MENU); //aviso al resto de sistemas
-			break;
-		default:
-			assert(false); // should not be rechable
-			break;
-		}
+		Key start;
+		start.key = Key::keyType::ENTER;
+		// switch (gameState_->state_) {
+		// case GameState::READY:
+		// 	gameState_->state_ = GameState::RUNNING;
+		// 	mngr_->send<msg::StartGameMsg>(); //aviso al resto de sistemas
+		// 	break;
+		// case GameState::OVER:
+		// 	gameState_->state_ = GameState::READY;
+		// 	mngr_->getSystem<TronSystem>(ecs::SysId::_sys_Tron)->reset();
+		// 	mngr_->send<msg::Message>(msg::_ARRIVED_TO_MENU); //aviso al resto de sistemas
+		// 	break;
+		// default:
+		// 	assert(false); // should not be rechable
+		// 	break;
+		// }
 	}
 }
 

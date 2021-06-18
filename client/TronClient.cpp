@@ -2,8 +2,8 @@
 #include "Chat.h"
 #include "Tron.h"
 
-void start() {
-	Tron g;
+void start(const char * s, const char * p) {
+	Tron g(s, p);
 	g.start();
 }
 
@@ -13,10 +13,7 @@ int main(int argc, char **argv)
 	//es.listen_clients();
 
     try {
-
-        ChatClient ec(argv[1], argv[2]);
-        std::thread net_thread([&ec](){ start();});
-		ec.input_thread();
+        start(argv[1], argv[2]);
 
 	} catch (std::string &e) { // catch errors thrown as strings
 		cerr << e << endl;
@@ -30,23 +27,4 @@ int main(int argc, char **argv)
 
 	return 0;
 }
-
-/*int main(int argc, char **argv)
-{
-    //Ponemos a ejecutar
-    Tron a;
-    a.start();
-    //std::thread net_thread([&a](){ a.start(); });
-
-    //Escuchamos posible input
-    // ChatClient ec(argv[1], argv[2]);
-    // ec.input_thread();
-    
-    //std::thread net_thread([&ec](){ ec.net_thread(); });
-
-    //ec.login();
-
-
-    return 0;
-}*/
 

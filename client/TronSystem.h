@@ -4,6 +4,7 @@
 #include "Transform.h"
 #include "Entity.h"
 #include "ImageComponent.h"
+#include "Serializable.h"
 
 class TronSystem : public System {
 public:
@@ -29,6 +30,7 @@ private:
 	Entity* player1_;
 	Entity* player2_;
 
+	Key::keyType lastKeyPressed;
 	double tamCas;
 
 	vector<vector<casilla>> encasillado;
