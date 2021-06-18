@@ -1,5 +1,4 @@
 #include "Chat.h"
-#include "InputHandler.h"
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
@@ -50,33 +49,33 @@ void ChatClient::logout()
 
 void ChatClient::input_thread()
 {
-    while (true)
-    {
-        auto ih = InputHandler::instance();
-        if (ih->keyDownEvent()) {
-            if (ih->isKeyDown(SDLK_RIGHT)) {
-                //cout << "Derecha\n";
-            }
-            else if (ih->isKeyDown(SDLK_LEFT)) {
-                //cout << "Izquierda\n";
-            }
-            else if (ih->isKeyDown(SDLK_UP)) {
-                //cout << "Arriba\n";
-            }
-            else if (ih->isKeyDown(SDLK_DOWN)) {
-                //cout << "Abajo\n";
-            }
-            else if (ih->isKeyDown(SDLK_RETURN)) {
-                Key k(Key::keyType::ENTER);
-                cout << "Enter pulsado\n";
-                // Enviar al servidor usando socket
-                //socket.send(k, socket);
-            }
-            else if (ih->isKeyDown(SDLK_ESCAPE)) {
+    // while (true)
+    // {
+    //     auto ih = InputHandler::instance();
+    //     if (ih->keyDownEvent()) {
+    //         if (ih->isKeyDown(SDLK_RIGHT)) {
+    //             //cout << "Derecha\n";
+    //         }
+    //         else if (ih->isKeyDown(SDLK_LEFT)) {
+    //             //cout << "Izquierda\n";
+    //         }
+    //         else if (ih->isKeyDown(SDLK_UP)) {
+    //             //cout << "Arriba\n";
+    //         }
+    //         else if (ih->isKeyDown(SDLK_DOWN)) {
+    //             //cout << "Abajo\n";
+    //         }
+    //         else if (ih->isKeyDown(SDLK_RETURN)) {
+    //             Key k(Key::keyType::ENTER);
+    //             cout << "Enter pulsado\n";
+    //             // Enviar al servidor usando socket
+    //             //socket.send(k, socket);
+    //         }
+    //         else if (ih->isKeyDown(SDLK_ESCAPE)) {
                 
-            }
-        }
-    }
+    //         }
+    //     }
+    // }
 }
 
 void ChatClient::net_thread()

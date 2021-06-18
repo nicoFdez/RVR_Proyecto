@@ -22,7 +22,6 @@
 class Serializable
 {
 public:
-    //enum MessageType { InicioPartida, Partida, FinalPartida, Input};
 
     Serializable():_size(0), _data(0){};
 
@@ -106,32 +105,37 @@ public:
 
     Key(){};
 
-    Key(keyType keyPressed):key(keyPressed){};
+    Key(keyType keyPressed):key(keyPressed),connect(false){};
 
     void to_bin(){
-        int size = sizeof(keyType);
+        int size = sizeof(keyType)+ sizeof(bool);
         alloc_data(size);
         memset(_data, 0, size);
 
         //Serializar los campos type, nick y message en el buffer _data
         char* aux = _data;
-        memcpy(aux, &key, size);
+        memcpy(aux, &key, sizeof(keyType));
+        aux+=sizeof(keyType);
+        memcpy(aux, &connect, sizeof(bool));
     }
 
     int from_bin(char * bobj){
-        int size = sizeof(keyType);
+        int size = sizeof(keyType)+ sizeof(bool);
         alloc_data(size);
 
         memcpy(static_cast<void *>(_data), bobj, size);
 
         //Reconstruir la clase usando el buffer _data
         char* aux = _data;
-        memcpy(&key, aux, size);
+        memcpy(&key, aux, sizeof(keyType));
+        aux+=sizeof(keyType);
+        memcpy(&connect, aux, sizeof(bool));
 
         return 0;
     }
 
-    keyType key;
+    bool connect=false;
+    keyType key=  keyType::NONE;
 };
 
 

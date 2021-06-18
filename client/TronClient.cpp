@@ -9,8 +9,6 @@ void start(const char * s, const char * p) {
 
 int main(int argc, char **argv)
 {
-    //ChatServer es(argv[1], argv[2]);
-	//es.listen_clients();
 
     try {
         start(argv[1], argv[2]);

@@ -24,6 +24,7 @@ void SocketSystem::receive(const msg::Message& msg)
 }
 
 void SocketSystem::listenMessages(){
+
 	while(true)
     {
         // //Recibir Mensajes de red
@@ -31,6 +32,7 @@ void SocketSystem::listenMessages(){
         socket.recv(msg);
 
         if(msg.empezarPartida){
+            cout<<"COMIENZA LA PARTIDA\n";
 		    mngr_->send<msg::StartGameMsg>(); 
         }
         else if(msg.terminarPartida){
@@ -39,8 +41,8 @@ void SocketSystem::listenMessages(){
         else{
             TronSystem* tSystem = mngr_->getSystem<TronSystem>(ecs::SysId::_sys_Tron);
             tSystem->setEncasillado(msg.tablero);
-            tSystem->setPlayerTransform(1,msg.tr1);
-            tSystem->setPlayerTransform(2,msg.tr2);
+            tSystem->setPlayerTransform(1,msg.p1Pos, msg.p1Rot);
+            tSystem->setPlayerTransform(2,msg.p2Pos,msg.p2Rot);
         }
     }
 }

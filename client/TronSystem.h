@@ -17,19 +17,17 @@ public:
 	void init() override;
 	void update() override;
 	void inputManagement();
-	Vector2D updatePlayerPos(Transform* trPlayer, Vector2D dirPlayer);
-	bool checkCollision(Vector2D pos);
+
+
 	virtual void receive(const msg::Message& msg) override;
 
 	Entity* getPlayer1() { return player1_; }
 	Entity* getPlayer2() { return player2_; }
-
 	const vector<vector<casilla>>& getTronMap() { return encasillado; }
+
 	void reset();
-
 	void setEncasillado(vector<vector<int>> mapa);
-
-	void setPlayerTransform(int id, Transform tr);
+	void setPlayerTransform(int id, Vector2D pos, float rot );
 
 private:
 	Entity* player1_;

@@ -19,10 +19,10 @@ TronSystem::TronSystem() :
 void TronSystem::init() {
 	movementTimer = 200;
 	lastTickMoved = game_->getTime();
-	tamCas = 10;
+	tamCas = game_->getWindowWidth()/50;
 	lastKeyPressed = Key::keyType::NONE;
 
-	encasillado = vector <vector<casilla>>(game_->getWindowWidth() / tamCas, vector<casilla>(game_->getWindowHeight() / tamCas, casilla()));
+	encasillado = vector <vector<casilla>>(50, vector<casilla>(50, casilla()));
 
 	//Establecemos posiciones de los Rects
 	for (int i = 0; i < encasillado.size(); i++) {
@@ -63,25 +63,6 @@ void TronSystem::update() {
 
 	inputManagement();
 
-	if (game_->getTime() - lastTickMoved > movementTimer) {
-		lastTickMoved = game_->getTime();
-
-		//Update el player 1
-		Vector2D finalPosPlayer = updatePlayerPos(tr1_, _dirP1);
-		if (checkCollision(finalPosPlayer)) {
-			mngr_->send<msg::GameOverMsg>(2);
-		}
-		else
-			encasillado[finalPosPlayer.getX()][finalPosPlayer.getY()].miEstado = estadoCasilla::player1;
-
-		//Update el player 2
-		finalPosPlayer = updatePlayerPos(tr2_, _dirP2);
-		if (checkCollision(finalPosPlayer)) {
-			mngr_->send<msg::GameOverMsg>(1);
-		}
-		else
-			encasillado[finalPosPlayer.getX()][finalPosPlayer.getY()].miEstado = estadoCasilla::player2;
-	}
 }
 
 void TronSystem::inputManagement()
@@ -107,28 +88,6 @@ void TronSystem::inputManagement()
 	}
 }
 
-Vector2D TronSystem::updatePlayerPos(Transform* trPlayer, Vector2D dirPlayer)
-{
-	// Movimiento del player 1
-	Vector2D oldPositions = trPlayer->position_;
-	trPlayer->position_ = trPlayer->position_ + (dirPlayer * tamCas);
-	int x = trPlayer->position_.getX();
-	int y = trPlayer->position_.getY();
-	if (x < 0 || x + trPlayer->width_ > game_->getWindowWidth() || y < 0
-		|| y + trPlayer->height_ > game_->getWindowHeight()) {
-		trPlayer->position_ = oldPositions;
-	}
-	//MarcarCasilla del player 1
-	int indiceX = trPlayer->position_.getX() / tamCas;
-	int indiceY = trPlayer->position_.getY() / tamCas;
-
-	return Vector2D(indiceX, indiceY);
-}
-
-bool TronSystem::checkCollision(Vector2D pos)
-{
-	return encasillado[pos.getX()][pos.getY()].miEstado != estadoCasilla::none;
-}
 
 void TronSystem::receive(const msg::Message& msg)
 {
@@ -188,11 +147,13 @@ void TronSystem::setEncasillado(vector<vector<int>> mapa){
 
 }
 
-void TronSystem::setPlayerTransform(int id, Transform tr){
+void TronSystem::setPlayerTransform(int id, Vector2D pos, float rot){
 	if(id == 1){
-		*tr1_ = tr;
+		tr1_->position_ = (pos*tamCas);
+		tr2_->rotation_ = rot;	
 	}
 	else if(id == 2){
-		*tr2_ = tr;
+		tr2_->position_ = (pos*tamCas);
+		tr2_->rotation_ = rot;
 	}
 }

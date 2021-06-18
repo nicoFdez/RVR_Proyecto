@@ -1,20 +1,23 @@
 #include "Serializable.h"
 #include <vector>
-#include "Transform.h"
+#include "Vector2D.h"
 
 class TronServerMsg: public Serializable
 {
 public:
 
-    TronServerMsg(vector<vector<int>> encasillado, Transform t1, Transform t2){
+    TronServerMsg(vector<vector<int>> encasillado, Vector2D p1P, Vector2D p2P, float p1R, float p2R){
         tablero = encasillado;
-        tr1 = t1;
-        tr2 = t2;
-        messageSize = ((50*50)*sizeof(int)) + (2*sizeof(Transform)) + (2*sizeof(bool))+ sizeof(int);
+        p1Pos = p1P;
+        p2Pos = p2P;
+        p1Rot = p1R;
+        p2Rot = p2R;
+        messageSize = ((50*50)*sizeof(int)) + (2*sizeof(Vector2D))+ (2*sizeof(float)) + (2*sizeof(bool))+ sizeof(int);
     };
 
     TronServerMsg(){
-        messageSize = ((50*50)*sizeof(int)) + (2*sizeof(Transform)) + (2*sizeof(bool))+ sizeof(int);
+        tablero = vector<vector<int>> (50, vector<int>(50,0));
+        messageSize = ((50*50)*sizeof(int)) + (2*sizeof(Vector2D))+ (2*sizeof(float)) + (2*sizeof(bool))+ sizeof(int);
     };
 
 
@@ -33,10 +36,14 @@ public:
             }
         }
 
-        memcpy(aux, &tr1, sizeof(Transform));
-        aux +=  sizeof(Transform);
-        memcpy(aux, &tr2, sizeof(Transform));
-        aux +=  sizeof(Transform);    
+        memcpy(aux, &p1Pos, sizeof(Vector2D));
+        aux +=  sizeof(Vector2D);
+        memcpy(aux, &p1Rot, sizeof(float));
+        aux +=  sizeof(float);
+        memcpy(aux, &p2Pos, sizeof(Vector2D));
+        aux +=  sizeof(Vector2D);    
+        memcpy(aux, &p2Pos, sizeof(float));
+        aux +=  sizeof(float);
 
         memcpy(aux, &empezarPartida, sizeof(bool));
         aux +=  sizeof(bool); 
@@ -61,10 +68,14 @@ public:
             }
         }
 
-        memcpy( &tr1,aux, sizeof(Transform));
-        aux +=  sizeof(Transform);
-        memcpy(&tr2,aux, sizeof(Transform));
-        aux +=  sizeof(Transform);    
+        memcpy(&p1Pos,aux, sizeof(Vector2D));
+        aux += sizeof(Vector2D);
+        memcpy(&p1Rot,aux, sizeof(float));
+        aux += sizeof(float);
+        memcpy(&p2Pos,aux, sizeof(Vector2D));
+        aux += sizeof(Vector2D);    
+        memcpy(&p2Pos,aux, sizeof(float));
+        aux += sizeof(float);  
 
         memcpy(&empezarPartida,aux, sizeof(bool));
         aux +=  sizeof(bool); 
@@ -78,8 +89,12 @@ public:
 
     double messageSize;
     std::vector<std::vector<int>> tablero;
-    Transform tr1;
-    Transform tr2;
+
+
+    Vector2D p1Pos;
+    Vector2D p2Pos;
+    float p1Rot;
+    float p2Rot;
 
     bool empezarPartida;
     bool terminarPartida;

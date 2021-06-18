@@ -59,6 +59,10 @@ void GameCtrlSystem::receive(const msg::Message& msg)
 			gameState_->winner_ = static_cast<const msg::GameOverMsg&>(msg).winner;
 		 	break;
 		 }
+		case msg::_GAME_START: {
+			gameState_->state_ = GameState::RUNNING;
+		 	break;
+		 }
 	default:
 		break;
 	}

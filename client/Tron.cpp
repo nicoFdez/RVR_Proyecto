@@ -44,6 +44,13 @@ void Tron::start() {
 	exit_ = false;
 	auto ih = InputHandler::instance();
 
+	//Me concecto al server
+	Key messageLOGIN;
+	messageLOGIN.connect = true; 
+	socketSystem_->sendToServer(messageLOGIN);
+
+	
+
 	while (!exit_) {
 		Uint32 startTime = game_->getTime();
 		SDL_SetRenderDrawColor(game_->getRenderer(), COLOR(0x000000FF));
