@@ -18,7 +18,7 @@ Tron::~Tron() {
 }
 
 void Tron::initGame(const char * s, const char * p) {
-	game_ = SDLGame::init("Stars", _WINDOW_WIDTH_, _WINDOW_HEIGHT_);
+	game_ = SDLGame::init("Tron", _WINDOW_WIDTH_, _WINDOW_HEIGHT_);
 
 	// Initialize the pool, for the rest of factories it is not needed,
 	// we will be using DefFactory for simplicity (e.g., in addEntity,
@@ -48,8 +48,6 @@ void Tron::start() {
 	Key messageLOGIN;
 	messageLOGIN.connect = true; 
 	socketSystem_->sendToServer(messageLOGIN);
-
-	
 
 	while (!exit_) {
 		Uint32 startTime = game_->getTime();

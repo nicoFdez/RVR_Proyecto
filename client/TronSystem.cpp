@@ -37,7 +37,9 @@ void TronSystem::init() {
 	tr1_ = player1_->addComponent<Transform>();
 	tr2_ = player2_->addComponent<Transform>();
 
-	reset();
+	//reset();
+	tr1_->width_ = tr1_->height_ = 10;
+	tr2_->width_ = tr2_->height_ = 10;
 
 	auto animatedImage = player1_->addComponent<AnimatedImageComponent>();
 	animatedImage->setFrameTime(100);
@@ -88,54 +90,53 @@ void TronSystem::inputManagement()
 	}
 }
 
-
 void TronSystem::receive(const msg::Message& msg)
 {
-	switch (msg.id)
-	{
-	case msg::_GAME_START: {
-		reset();
-		break;
-	}
-	default:
-		break;
-	}
+	// switch (msg.id)
+	// {
+	// case msg::_GAME_START: {
+	// 	reset();
+	// 	break;
+	// }
+	// default:
+	// 	break;
+	// }
 }
 
-void TronSystem::reset() {
-	//Tama�o
-	tr1_->width_ = tr1_->height_ = 10.0;
+// void TronSystem::reset() {
+// 	//Tama�o
+// 	tr1_->width_ = tr1_->height_ = 10.0;
 
-	//Posicion en la esquina superior casilla
-	tr1_->position_ = Vector2D((game_->getWindowWidth() - tr1_->width_) / 4,
-		(game_->getWindowHeight() - tr1_->height_) / 4);
-	int indiceX = tr1_->position_.getX() / tamCas;
-	int indiceY = tr1_->position_.getY() / tamCas;
-	tr1_->position_ = Vector2D(indiceX * tamCas, indiceY * tamCas);
-	//Vel
-	tr1_->rotation_ = 0.0;
-	_dirP1 = Vector2D(1, 0);
+// 	//Posicion en la esquina superior casilla
+// 	tr1_->position_ = Vector2D((game_->getWindowWidth() - tr1_->width_) / 4,
+// 		(game_->getWindowHeight() - tr1_->height_) / 4);
+// 	int indiceX = tr1_->position_.getX() / tamCas;
+// 	int indiceY = tr1_->position_.getY() / tamCas;
+// 	tr1_->position_ = Vector2D(indiceX * tamCas, indiceY * tamCas);
+// 	//Vel
+// 	tr1_->rotation_ = 0.0;
+// 	_dirP1 = Vector2D(1, 0);
 
-	//Player 2 lo mismo
-	tr2_->width_ = tr2_->height_ = 10.0;
-	tr2_->position_ = Vector2D((game_->getWindowWidth() - tr2_->width_) * 3 / 4,
-		(game_->getWindowHeight() - tr2_->height_) * 3 / 4);
-	indiceX = tr2_->position_.getX() / tamCas;
-	indiceY = tr2_->position_.getY() / tamCas;
+// 	//Player 2 lo mismo
+// 	tr2_->width_ = tr2_->height_ = 10.0;
+// 	tr2_->position_ = Vector2D((game_->getWindowWidth() - tr2_->width_) * 3 / 4,
+// 		(game_->getWindowHeight() - tr2_->height_) * 3 / 4);
+// 	indiceX = tr2_->position_.getX() / tamCas;
+// 	indiceY = tr2_->position_.getY() / tamCas;
 
-	tr2_->position_ = Vector2D(indiceX * tamCas, indiceY * tamCas);
-	tr2_->rotation_ = 0.0;
-	_dirP2 = Vector2D(-1, 0);
+// 	tr2_->position_ = Vector2D(indiceX * tamCas, indiceY * tamCas);
+// 	tr2_->rotation_ = 0.0;
+// 	_dirP2 = Vector2D(-1, 0);
 
-	lastTickMoved = game_->getTime();
+// 	lastTickMoved = game_->getTime();
 
-	//Establecemos posiciones de los Rects
-	for (int i = 0; i < encasillado.size(); i++) {
-		for (int j = 0; j < encasillado.size(); j++) {
-			encasillado[i][j].miEstado = estadoCasilla::none;
-		}
-	}
-}
+// 	//Establecemos posiciones de los Rects
+// 	for (int i = 0; i < encasillado.size(); i++) {
+// 		for (int j = 0; j < encasillado.size(); j++) {
+// 			encasillado[i][j].miEstado = estadoCasilla::none;
+// 		}
+// 	}
+// }
 
 void TronSystem::setEncasillado(vector<vector<int>> mapa){
 
@@ -150,7 +151,7 @@ void TronSystem::setEncasillado(vector<vector<int>> mapa){
 void TronSystem::setPlayerTransform(int id, Vector2D pos, float rot){
 	if(id == 1){
 		tr1_->position_ = (pos*tamCas);
-		tr2_->rotation_ = rot;	
+		tr1_->rotation_ = rot;
 	}
 	else if(id == 2){
 		tr2_->position_ = (pos*tamCas);

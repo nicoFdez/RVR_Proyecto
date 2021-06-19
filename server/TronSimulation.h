@@ -9,6 +9,8 @@
 
 using namespace std;
 
+enum State : uint8_t { READY, RUNNING, OVER };
+
 class TronSimulation {
 public:
 	TronSimulation(const char * s, const char * p);
@@ -24,11 +26,14 @@ private:
 	Vector2D updatePlayerPos(Vector2D playerPos, Vector2D dirPlayer);
 	bool checkCollision(Vector2D pos);
 
+	void resetMatch();
+	void resetPlayers();
 
 	void proccessP1Input();
 	void proccessP2Input();
 
 	bool exit_;
+	State state = State::READY;
 
 
 	Socket* player1=nullptr;
@@ -50,7 +55,4 @@ private:
 	Vector2D dirP2;
 	float rotP1;
 	float rotP2;
-
-	
-
 };

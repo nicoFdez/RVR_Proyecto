@@ -25,7 +25,7 @@ public:
 	Entity* getPlayer2() { return player2_; }
 	const vector<vector<casilla>>& getTronMap() { return encasillado; }
 
-	void reset();
+	//void reset();
 	void setEncasillado(vector<vector<int>> mapa);
 	void setPlayerTransform(int id, Vector2D pos, float rot );
 

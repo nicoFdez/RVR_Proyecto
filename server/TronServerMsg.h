@@ -12,12 +12,12 @@ public:
         p2Pos = p2P;
         p1Rot = p1R;
         p2Rot = p2R;
-        messageSize = ((50*50)*sizeof(int)) + (2*sizeof(Vector2D))+ (2*sizeof(float)) + (2*sizeof(bool))+ sizeof(int);
+        messageSize = ((50*50)*sizeof(int)) + (2*sizeof(Vector2D))+ (2*sizeof(float)) + (4*sizeof(bool))+ sizeof(int);
     };
 
     TronServerMsg(){
         tablero = vector<vector<int>> (50, vector<int>(50,0));
-        messageSize = ((50*50)*sizeof(int)) + (2*sizeof(Vector2D))+ (2*sizeof(float)) + (2*sizeof(bool))+ sizeof(int);
+        messageSize = ((50*50)*sizeof(int)) + (2*sizeof(Vector2D))+ (2*sizeof(float)) + (4*sizeof(bool)) + sizeof(int);
     };
 
 
@@ -42,13 +42,17 @@ public:
         aux +=  sizeof(float);
         memcpy(aux, &p2Pos, sizeof(Vector2D));
         aux +=  sizeof(Vector2D);    
-        memcpy(aux, &p2Pos, sizeof(float));
+        memcpy(aux, &p2Rot, sizeof(float));
         aux +=  sizeof(float);
 
+        memcpy(aux, &playersListos, sizeof(bool));
+        aux +=  sizeof(bool); 
         memcpy(aux, &empezarPartida, sizeof(bool));
         aux +=  sizeof(bool); 
         memcpy(aux, &terminarPartida, sizeof(bool));
-        aux +=  sizeof(bool);   
+        aux +=  sizeof(bool);
+        memcpy(aux, &backToMenu, sizeof(bool));
+        aux +=  sizeof(bool);
 
         memcpy(aux, &ganador, sizeof(int));
 
@@ -74,13 +78,17 @@ public:
         aux += sizeof(float);
         memcpy(&p2Pos,aux, sizeof(Vector2D));
         aux += sizeof(Vector2D);    
-        memcpy(&p2Pos,aux, sizeof(float));
+        memcpy(&p2Rot,aux, sizeof(float));
         aux += sizeof(float);  
 
+        memcpy(&playersListos,aux, sizeof(bool));
+        aux +=  sizeof(bool);
         memcpy(&empezarPartida,aux, sizeof(bool));
         aux +=  sizeof(bool); 
         memcpy(&terminarPartida,aux, sizeof(bool));
-        aux +=  sizeof(bool);   
+        aux +=  sizeof(bool);
+        memcpy(&backToMenu,aux, sizeof(bool));
+        aux +=  sizeof(bool);
 
         memcpy(&ganador,aux, sizeof(int));
 
@@ -90,14 +98,15 @@ public:
     double messageSize;
     std::vector<std::vector<int>> tablero;
 
-
     Vector2D p1Pos;
     Vector2D p2Pos;
     float p1Rot;
     float p2Rot;
 
-    bool empezarPartida;
-    bool terminarPartida;
-    int ganador;
+    bool playersListos = false;
+    bool empezarPartida = false;
+    bool terminarPartida = false;
+    bool backToMenu = false;
+    int ganador = 0;
 
 };

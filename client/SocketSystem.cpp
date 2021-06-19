@@ -32,11 +32,13 @@ void SocketSystem::listenMessages(){
         socket.recv(msg);
 
         if(msg.empezarPartida){
-            cout<<"COMIENZA LA PARTIDA\n";
 		    mngr_->send<msg::StartGameMsg>(); 
         }
         else if(msg.terminarPartida){
 			mngr_->send<msg::GameOverMsg>(msg.ganador);
+        }
+        else if(msg.backToMenu){
+            mngr_->send<msg::Message>(msg::_ARRIVED_TO_MENU);
         }
         else{
             TronSystem* tSystem = mngr_->getSystem<TronSystem>(ecs::SysId::_sys_Tron);

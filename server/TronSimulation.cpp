@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <thread>
 
-#define TICKRATE 300000
+#define TICKRATE 500000
 
 using namespace std;
 
@@ -24,39 +24,25 @@ TronSimulation::~TronSimulation() {
 }
 
 void TronSimulation::initGame() {
-	while( player1 == nullptr ) {
 
-		if(player1 == nullptr) {
-			Key receptor;
-			Socket* nuevo = (Socket*)&receptor;    //Hago que el puntero apunte a cualquier cosa para que el recv me cree un nuevo socket
-			mySocket.recv(receptor,nuevo);
-			if(receptor.connect){
-				player1 = nuevo;
-			}
+	if(player1 == nullptr) {
+		Key receptor;
+		Socket* nuevo = (Socket*)&receptor;    //Hago que el puntero apunte a cualquier cosa para que el recv me cree un nuevo socket
+		mySocket.recv(receptor,nuevo);
+		if(receptor.connect){
+			player1 = nuevo;
 		}
-		// else if(player2 == nullptr) {
-		// 	Key receptor;
-		// 	Socket* nuevo = (Socket*)&receptor;    //Hago que el puntero apunte a cualquier cosa para que el recv me cree un nuevo socket
-		// 	mySocket.recv(receptor,nuevo);
-		// 	if(receptor.key == Key::keyType::NONE){
-		// 		player2 = nuevo;
-		// 	}
-		// }
 	}
-
-
-	cout << "HURRAAA SE CONECTA EL P1\n";
+	while(player2 == nullptr) {
+		Key receptor;
+		Socket* nuevo = (Socket*)&receptor;    //Hago que el puntero apunte a cualquier cosa para que el recv me cree un nuevo socket
+		mySocket.recv(receptor,nuevo);
+		if(receptor.connect){
+			player2 = nuevo;
+		}
+	}
 	
-	dirP1 = Vector2D(0,1);
-	dirP2 = Vector2D(0,-1);
-	rotP1= 90;
-	rotP2 = 270;
-	posP1 = Vector2D(50/4 , 50/4);
-	posP2= Vector2D(50*3/4 , 50*3/4);
-	
-	TronServerMsg inicio; 
-	inicio.empezarPartida = true;
-	mySocket.send(inicio,*player1);
+	resetMatch();
 }
 
 void TronSimulation::closeGame() {
@@ -65,11 +51,12 @@ void TronSimulation::closeGame() {
 
 void TronSimulation::run() {
 
-	while(player1 != nullptr ){
+	while(player1 != nullptr && player2 != nullptr ){
 		usleep(TICKRATE);
 		proccessP1Input();
 		proccessP2Input();
-		simulate();
+		if(state == State::RUNNING)
+			simulate();
 	}
 }
 
@@ -82,11 +69,15 @@ void TronSimulation::simulate(){
 	TronServerMsg actualizacion;
 	if(checkCollision(posP1)){
 		actualizacion.terminarPartida = true;
-		actualizacion.ganador = 2; 
+		actualizacion.ganador = 2;
+		state = State::OVER;
+		resetMatch();
 	}
 	else if(checkCollision(posP2)){
 		actualizacion.terminarPartida = true;
-		actualizacion.ganador = 1; 
+		actualizacion.ganador = 1;
+		state = State::OVER;
+		resetMatch();
 	}
 	else{
 		encasillado[posP1.getX()][posP1.getY()] = 1;
@@ -98,10 +89,8 @@ void TronSimulation::simulate(){
 		actualizacion.tablero = encasillado;
 	}
 	mySocket.send(actualizacion,*player1);
-
+	mySocket.send(actualizacion,*player2);
 }
-
-
 
 Vector2D TronSimulation::updatePlayerPos(Vector2D playerPos, Vector2D dirPlayer)
 {
@@ -125,33 +114,49 @@ bool TronSimulation::checkCollision(Vector2D pos)
 	return encasillado[pos.getX()][pos.getY()] != 0;
 }
 
-
-
 void TronSimulation::proccessP1Input(){
 	if(lastPressedP1 != Key::keyType::NONE){
 		switch (lastPressedP1){
 			case Key::keyType::UP:{
 				rotP1=0;
-				dirP1.setX(-1);
-				dirP1.setY(0);
-			break;
-			}
-			case Key::keyType::DOWN:{
-				rotP1=180;
-				dirP1.setX(1);
-				dirP1.setY(0);
-			break;
-			}
-			case Key::keyType::LEFT:{
-				rotP1=270;
 				dirP1.setX(0);
 				dirP1.setY(-1);
 			break;
 			}
-			case Key::keyType::RIGHT:{
-				rotP1=90;
+			case Key::keyType::DOWN:{
+				rotP1=180;
 				dirP1.setX(0);
 				dirP1.setY(1);
+			break;
+			}
+			case Key::keyType::LEFT:{
+				rotP1=270;
+				dirP1.setX(-1);
+				dirP1.setY(0);
+			break;
+			}
+			case Key::keyType::RIGHT:{
+				rotP1=90;
+				dirP1.setX(1);
+				dirP1.setY(0);
+			break;
+			}
+			case Key::keyType::ENTER:{
+				if(state == State::READY){
+					state = State::RUNNING;
+					TronServerMsg inicio; 
+					inicio.empezarPartida = true;
+					mySocket.send(inicio,*player1);
+					mySocket.send(inicio,*player2);
+				}
+				else if(state = State::OVER){
+					cout << "Vuelta al menu \n";
+					state = State::READY;
+					TronServerMsg reinicio; 
+					reinicio.backToMenu = true;
+					mySocket.send(reinicio,*player1);
+					mySocket.send(reinicio,*player2);
+				}
 			break;
 			}
 		}
@@ -160,10 +165,53 @@ void TronSimulation::proccessP1Input(){
 }
 
 void TronSimulation::proccessP2Input(){
+	if(lastPressedP2 != Key::keyType::NONE){
+		switch (lastPressedP2){
+			case Key::keyType::UP:{
+				rotP2=0;
+				dirP2.setX(0);
+				dirP2.setY(-1);
+			break;
+			}
+			case Key::keyType::DOWN:{
+				rotP2=180;
+				dirP2.setX(0);
+				dirP2.setY(1);
+			break;
+			}
+			case Key::keyType::LEFT:{
+				rotP2=270;
+				dirP2.setX(-1);
+				dirP2.setY(0);
+			break;
+			}
+			case Key::keyType::RIGHT:{
+				rotP2=90;
+				dirP2.setX(1);
+				dirP2.setY(0);
+			break;
+			}
+			case Key::keyType::ENTER:{
+				if(state == State::READY){
+					state = State::RUNNING;
+					TronServerMsg inicio; 
+					inicio.empezarPartida = true;
+					mySocket.send(inicio,*player1);
+					mySocket.send(inicio,*player2);
+				}
+				else if(state = State::OVER){
+					state = State::READY;
+					TronServerMsg reinicio; 
+					reinicio.backToMenu = true;
+					mySocket.send(reinicio,*player1);
+					mySocket.send(reinicio,*player2);
+				}
+			break;
+			}
+		}	
+		lastPressedP2 = Key::keyType::NONE;
+	}
 }
-
-
-
 
 void TronSimulation::net_thread(){
 
@@ -174,13 +222,29 @@ void TronSimulation::net_thread(){
         Socket* nuevo = (Socket*)&msg;    //Hago que el puntero apunte a cualquier cosa para que el recv me cree un nuevo socket
         mySocket.recv(msg,nuevo);
 
-
-		if(nuevo == player1){
+		if(*nuevo == *player1){
 			lastPressedP1 = msg.key;
 		}
-		else if(nuevo == player2){
+		else if(*nuevo == *player2){
 			lastPressedP2 = msg.key;
 		}
-
     }
+}
+
+void TronSimulation::resetMatch(){
+	for(int i=0; i<encasillado.size(); i++){
+		for(int j=0; j<encasillado[i].size(); j++){
+			encasillado[i][j] = 0;
+		}
+	}
+	resetPlayers();
+}
+
+void TronSimulation::resetPlayers(){
+	dirP1 = Vector2D(1,0);
+	dirP2 = Vector2D(-1,0);
+	rotP1= 90;
+	rotP2 = 270;
+	posP1 = Vector2D(50/4 , 50/4);
+	posP2= Vector2D(50*3/4 , 50*3/4);
 }
