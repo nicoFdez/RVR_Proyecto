@@ -6,6 +6,7 @@
 #include "Socket.h"
 #include "Serializable.h"
 #include "TronServerMsg.h"
+#include <mutex>
 
 using namespace std;
 
@@ -19,8 +20,9 @@ public:
 
 	void net_thread();
 private:
+
+	void waitForPlayers();
 	void initGame();
-	void closeGame();
 
 	void simulate();
 	Vector2D updatePlayerPos(Vector2D playerPos, Vector2D dirPlayer);
@@ -55,4 +57,5 @@ private:
 	Vector2D dirP2;
 	float rotP1;
 	float rotP2;
+	std::mutex playerInputMutex;
 };

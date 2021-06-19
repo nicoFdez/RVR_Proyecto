@@ -72,6 +72,8 @@ public:
 		return mbState_[b];
 	}
 
+	inline bool getClose() {return close;}
+
 	// Joystick
 	// see:
 	//   Chapter 4 of 'SDL Game Development' book
@@ -110,7 +112,7 @@ private:
 	bool isKeyDownEvent_;
 	bool isMouseMotionEvent_;
 	bool isMouseButtonEvent_;
-
+	bool close = false;
 	Vector2D mousePos_;
 	std::array<bool, 3> mbState_;
 };

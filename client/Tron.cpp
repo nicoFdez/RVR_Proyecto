@@ -55,16 +55,14 @@ void Tron::start() {
 		SDL_RenderClear(game_->getRenderer());
 
 		ih->update();
-		if (ih->keyDownEvent()) {
-			if (ih->isKeyDown(SDLK_ESCAPE)) {
-				exit_ = true;
-				Key exit;
-				exit.key = Key::keyType::ESC;
-				//Mandar mensaje de terminar
-				mngr_->getSystem<SocketSystem>(ecs::SysId::_sys_Socket)->sendToServer(exit);	
 
-				break;
-			}
+		if (ih->getClose()) {
+			exit_ = true;
+			Key exit;
+			exit.key = Key::keyType::ESC;
+			mngr_->getSystem<SocketSystem>(ecs::SysId::_sys_Socket)->sendToServer(exit);	
+
+			break;
 		}
 
 		mngr_->refresh();

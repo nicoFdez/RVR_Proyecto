@@ -27,6 +27,7 @@ void GameCtrlSystem::update() {
 	auto ih = game_->getInputHandler();
 	if (ih->keyDownEvent() && ih->isKeyDown(SDLK_RETURN)){
 		Key message(Key::keyType::ENTER);
+		cout<<"HE PULSADO ENTER \n";
  		mngr_->getSystem<SocketSystem>(ecs::SysId::_sys_Socket)->sendToServer(message);
 	}
 }

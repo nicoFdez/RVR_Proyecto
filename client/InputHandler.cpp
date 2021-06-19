@@ -36,6 +36,17 @@ void InputHandler::update() {
 		case SDL_MOUSEBUTTONUP:
 			onMouseButtonChange(event, false);
 			break;
+		
+		case SDL_WINDOWEVENT:
+			switch (event.window.event) {
+
+				case SDL_WINDOWEVENT_CLOSE:   
+					close = true;
+					break;
+				default:
+					break;
+			}
+        break;
 		}
 	}
 }

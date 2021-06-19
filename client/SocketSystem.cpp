@@ -18,8 +18,6 @@ void SocketSystem::update() {
 
 void SocketSystem::receive(const msg::Message& msg)
 {
-
-
 	
 }
 
