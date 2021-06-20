@@ -36,10 +36,8 @@ void SocketSystem::listenMessages(){
         }
         //Si el mensaje es de actualizacion se actualizan las variables correspondientes del TronSystem
         else{
-            TronSystem* tSystem = mngr_->getSystem<TronSystem>(ecs::SysId::_sys_Tron);
-            tSystem->setEncasillado(msg.tablero);
-            tSystem->setPlayerTransform(1,msg.p1Pos, msg.p1Rot);
-            tSystem->setPlayerTransform(2,msg.p2Pos,msg.p2Rot);
+            //Mando este mensaje para que aquellos sistemas que esten relacionados con el juego se actualicen con lo que ha dicho el server
+			mngr_->send<msg::WorldState>(msg.tablero, msg.p1Pos,msg.p1Rot,msg.p2Pos,msg.p2Rot);
         }
     }
 }

@@ -96,7 +96,21 @@ void TronSystem::inputManagement()
 
 void TronSystem::receive(const msg::Message& msg)
 {
-
+	
+	switch (msg.id)
+	{
+		//Si el mensaje esta relacionado con la partida lo casteo y seteo el mapa y los 
+		//jugadores a lo que me hayan indicado
+		case msg::_WORLD_STATE: {
+			msg::WorldState estado = static_cast<const msg::WorldState&>(msg);
+		 	setEncasillado(estado.tablero);
+            setPlayerTransform(1,estado.p1Pos, estado.p1Rot);
+            setPlayerTransform(2,estado.p2Pos,estado.p2Rot);
+			break;
+		}
+		default:
+			break;
+	}
 }
 
 void TronSystem::setEncasillado(vector<vector<int>> mapa){
