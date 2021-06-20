@@ -4,7 +4,7 @@
 #include <map>
 
 /*
- *
+ * Manager que se encarga de cargar los recursos relacionados con lo visual (imagenes, sprites, etc...)
  */
 class SDLTexturesManager: public TexturesManager {
 public:

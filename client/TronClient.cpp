@@ -3,7 +3,10 @@
 #include "Tron.h"
 
 void start(const char * s, const char * p) {
+	//Inicializacion del cliente
 	Tron g(s, p);
+
+	//Ponemos a ejecutar
 	g.start();
 }
 

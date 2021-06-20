@@ -7,6 +7,10 @@
 
 using namespace std;
 
+
+/*
+* Clase base que nos sirve para controlar el input que SDL nos ofrece
+*/
 class InputHandler {
 public:
 	enum MOUSEBUTTON : Uint8 {

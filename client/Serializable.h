@@ -92,6 +92,7 @@ class Key: public Serializable
 {
 public:
 
+    //Enum que represena las opciones que tiene el cliente para comunicarse con el server
     enum keyType
     {
         LEFT   = 0,
@@ -107,6 +108,7 @@ public:
 
     Key(keyType keyPressed):key(keyPressed),connect(false){};
 
+    //Metodo heredado que guarda el objeto serializado en _data
     void to_bin(){
         int size = sizeof(keyType)+ sizeof(bool);
         alloc_data(size);
@@ -119,6 +121,7 @@ public:
         memcpy(aux, &connect, sizeof(bool));
     }
 
+    //Metodo heredado de serializable para sacar la informacion de datos binarios
     int from_bin(char * bobj){
         int size = sizeof(keyType)+ sizeof(bool);
         alloc_data(size);
@@ -134,7 +137,10 @@ public:
         return 0;
     }
 
+    //Flag utilizado por los clientes que sirve para indicar si pretende conectarse al server
     bool connect=false;
+
+    //Tipo de mensaje que el cliente pretende comunicar al servidor
     keyType key=  keyType::NONE;
 };
 

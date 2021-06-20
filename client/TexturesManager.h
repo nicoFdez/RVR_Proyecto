@@ -7,7 +7,7 @@
 using namespace std;
 
 /*
- *
+ * Manager que se encarga de cargar los recursos relacionados con lo visual (imagenes, sprites, etc...)
  */
 class TexturesManager {
 public:

@@ -5,7 +5,6 @@ unique_ptr<InputHandler> InputHandler::instance_;
 InputHandler::InputHandler() {
 	clearState();
 	kbState_ = SDL_GetKeyboardState(0);
-	//SDL_EnableKeyRepeat(0,0);
 }
 
 InputHandler::~InputHandler() {
@@ -63,7 +62,5 @@ void InputHandler::clearState() {
 
 void InputHandler::onKeyDown(SDL_Event& event){
 	
-	isKeyDownEvent_ = true;
-	// kbState_ = SDL_GetKeyboardState(0);
-	
+	isKeyDownEvent_ = true;	
 }

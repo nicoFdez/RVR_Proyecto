@@ -1,6 +1,11 @@
 #include "Resources.h"
 #include "SDL_macros.h"
 
+
+/*
+* Asociacion de los IDs con los recursos
+*/
+
 vector<Resources::FontInfo> Resources::fonts_{
 	//
 			{ ARIAL16, "resources/fonts/ARIAL.ttf", 16 }, //

@@ -6,7 +6,7 @@
 using namespace std;
 
 /*
- *
+ * Manager de los recursos relacionados con las fuentes
  */
 class FontsManager {
 public:

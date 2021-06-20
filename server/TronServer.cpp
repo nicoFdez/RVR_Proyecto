@@ -3,6 +3,7 @@
 #include "TronSimulation.h"
 
 void start(const char * s, const char * p) {
+	//Se inicia la ejecucion del server
 	TronSimulation g(s, p);
 }
 

@@ -8,6 +8,11 @@
 #include "messages.h"
 #include "System.h"
 
+
+/*
+* Clase base que controla los sistemas y las entidades del juego
+*/
+
 class Manager {
 	using uptr_ent = std::unique_ptr<Entity, std::function<void(Entity*)>>;
 	using uptr_msg = std::unique_ptr<msg::Message, std::function<void(msg::Message*)>>;

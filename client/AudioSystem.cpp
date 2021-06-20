@@ -10,6 +10,7 @@ void AudioSystem::receive(const msg::Message& msg)
 {
 	switch (msg.id)
 	{
+		//Dependiendo del mensaje que nos llegue hacemos una accion u otra con el audio/musica
 		case msg::_GAME_OVER: {
 	 		game_->getAudioMngr()->playChannel(Resources::Collision, 0);
 			game_->getAudioMngr()->haltMusic();

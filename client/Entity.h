@@ -10,9 +10,12 @@
 #include "ecs.h"
 #include "DefFactory.h"
 
-// We don't include the EntityManager class to avoid circular dependeincies
 class Manager;
 
+
+/*
+* Clase que va a representar las entidades dentro de nuestro juego y va a contener componentes
+*/
 class Entity {
 	// defining a type just for brevity
 	using uptr_cmp = std::unique_ptr<Component, std::function<void(Component*)>>;

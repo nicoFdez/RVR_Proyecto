@@ -53,11 +53,6 @@ void SDLGame::initSDL() {
 
 void SDLGame::closeSDL() {
 
-	if(renderer_ != nullptr){
-		//SDL_DestroyRenderer(renderer_);
-		renderer_ = nullptr;
-	}
-
 	if(window_ != nullptr){
 		SDL_DestroyWindow(window_);
 		window_ = nullptr;

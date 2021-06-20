@@ -17,12 +17,12 @@ TronSystem::TronSystem() :
 }
 
 void TronSystem::init() {
-	movementTimer = 200;
-	lastTickMoved = game_->getTime();
+	//Se establece dimensiones generales de la casilla
 	tamCas = game_->getWindowWidth()/50;
-	lastKeyPressed = Key::keyType::NONE;
-
 	encasillado = vector <vector<casilla>>(50, vector<casilla>(50, casilla()));
+
+	//Inicialmente el player n ha pulsado nada
+	lastKeyPressed = Key::keyType::NONE;
 
 	//Establecemos posiciones de los Rects
 	for (int i = 0; i < encasillado.size(); i++) {
@@ -30,17 +30,18 @@ void TronSystem::init() {
 			encasillado[i][j].renderRect = RECT(i * tamCas, j * tamCas, tamCas, tamCas);
 		}
 	}
-
+	
+	//Entidades de los jugadores
 	player1_ = mngr_->addEntity();
 	player2_ = mngr_->addEntity();
 
+	//Transforms de los jugadores
 	tr1_ = player1_->addComponent<Transform>();
-	tr2_ = player2_->addComponent<Transform>();
-
-	//reset();
 	tr1_->width_ = tr1_->height_ = 10;
+	tr2_ = player2_->addComponent<Transform>();
 	tr2_->width_ = tr2_->height_ = 10;
 
+	//Animacion del player1
 	auto animatedImage = player1_->addComponent<AnimatedImageComponent>();
 	animatedImage->setFrameTime(100);
 	Texture* spritesTex = game_->getTextureMngr()->getTexture(
@@ -49,6 +50,7 @@ void TronSystem::init() {
 		animatedImage->addFrame(spritesTex, { i * 128, 0, 128, 128 });
 	}
 
+	//Animacion del player2
 	animatedImage = player2_->addComponent<AnimatedImageComponent>();
 	animatedImage->setFrameTime(100);
 	spritesTex = game_->getTextureMngr()->getTexture(
@@ -59,16 +61,18 @@ void TronSystem::init() {
 }
 
 void TronSystem::update() {
+
+	//Si estamos en estado RUNNING (jugando) preguntamos por input sino, no hacemos nada
 	auto gameState = mngr_->getSystem<GameCtrlSystem>(ecs::SysId::_sys_GameCtrl)->getGameStateEntity()->getComponent<GameState>(ecs::GameState);
 	if (gameState->state_ != GameState::RUNNING)
 		return;
 
 	inputManagement();
-
 }
 
 void TronSystem::inputManagement()
 {
+	//Se recoge la tecla pulsada por el jugador
 	lastKeyPressed = Key::keyType::NONE;
 	auto ih = InputHandler::instance();
 	if (ih->keyDownEvent()) {
@@ -96,7 +100,7 @@ void TronSystem::receive(const msg::Message& msg)
 }
 
 void TronSystem::setEncasillado(vector<vector<int>> mapa){
-
+	//Establecemos las casillas a los valores que nos den
 	for(int i=0;i<mapa.size();i++){
 		for(int j=0;j<mapa.size();j++){
 			encasillado[i][j].miEstado = (estadoCasilla)mapa[i][j];
@@ -106,10 +110,14 @@ void TronSystem::setEncasillado(vector<vector<int>> mapa){
 }
 
 void TronSystem::setPlayerTransform(int id, Vector2D pos, float rot){
+
+	//Seteamos los valores del player 1
 	if(id == 1){
 		tr1_->position_ = (pos*tamCas);
 		tr1_->rotation_ = rot;
 	}
+
+	//Seteamos los valores del player 2
 	else if(id == 2){
 		tr2_->position_ = (pos*tamCas);
 		tr2_->rotation_ = rot;

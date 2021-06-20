@@ -4,7 +4,7 @@
 #include <map>
 
 /*
- *
+ * Manager que se encarga de cargar los recursos relacionados con las fuentes (utilizadas para rendrizar textos)
  */
 class SDLFontsManager: public FontsManager {
 public:

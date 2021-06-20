@@ -5,6 +5,10 @@ class Manager;
 #include "ecs.h"
 #include "messages.h"
 
+
+/*
+* Clase padre de los sistemas del juego
+*/
 class System {
 public:
 	System(ecs::SysIdType id) :

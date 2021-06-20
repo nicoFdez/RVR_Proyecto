@@ -13,6 +13,9 @@
 
 using namespace std;
 
+/*
+* Clase base que implementa un juego como aplicacion de SDL
+*/
 class SDLGame {
 public:
 	virtual ~SDLGame();

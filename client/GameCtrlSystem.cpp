@@ -14,8 +14,11 @@ GameCtrlSystem::GameCtrlSystem() :
 }
 
 void GameCtrlSystem::init() {
+	//Creamos la entidad que va a almacenar el estado del juego
 	gameStateEntity_ = mngr_->addEntity();
 	gameState_ = gameStateEntity_->addComponent<GameState>();
+
+	//Avisamos a todo el mundo que nos encontramos en el menu
 	mngr_->send<msg::Message>(msg::_ARRIVED_TO_MENU);
 }
 
@@ -23,17 +26,17 @@ void GameCtrlSystem::update() {
 	if (gameState_->state_ == GameState::RUNNING)
 		return;
 	
-
+	//Si se pulsa el enter se comunica al server
 	auto ih = game_->getInputHandler();
 	if (ih->keyDownEvent() && ih->isKeyDown(SDLK_RETURN)){
 		Key message(Key::keyType::ENTER);
-		cout<<"HE PULSADO ENTER \n";
  		mngr_->getSystem<SocketSystem>(ecs::SysId::_sys_Socket)->sendToServer(message);
 	}
 }
 
 void GameCtrlSystem::receive(const msg::Message& msg)
 {
+	//Cambio de estados indicados por el servidor/socketSystem
 	switch (msg.id)
 	{
 		case msg::_GAME_OVER: {
@@ -47,7 +50,6 @@ void GameCtrlSystem::receive(const msg::Message& msg)
 		}
 		case msg::_ARRIVED_TO_MENU: {
 			gameState_->state_ = GameState::READY;
-			//mngr_->getSystem<TronSystem>(ecs::SysId::_sys_Tron)->reset();
 		 	break;
 		}
 		default:

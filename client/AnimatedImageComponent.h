@@ -9,6 +9,9 @@
 
 #include <iostream>
 
+/*
+* Componente que sirve para añadir animaciones a las entidades del juego
+*/
 struct AnimatedImageComponent: Component {
 	using frame = std::pair<Texture*, SDL_Rect>;
 	AnimatedImageComponent() :

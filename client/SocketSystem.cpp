@@ -8,17 +8,10 @@ SocketSystem::SocketSystem(const char * s, const char * p)
 }
 
 void SocketSystem::init() {
+
+    //Thread que se encarga de la comunicacion con el server
 	std::thread sim_thread([this] { listenMessages();});
 	sim_thread.detach();
-}
-
-void SocketSystem::update() {
-	
-}
-
-void SocketSystem::receive(const msg::Message& msg)
-{
-	
 }
 
 void SocketSystem::listenMessages(){
@@ -29,15 +22,19 @@ void SocketSystem::listenMessages(){
         TronServerMsg msg;
         socket.recv(msg);
 
+        //Si el mensaje es de empezar partida se comunica el inicio al resto de sistemas
         if(msg.empezarPartida){
 		    mngr_->send<msg::StartGameMsg>(); 
         }
+        //Si el mensaje es de terminar partida se comunica el final al resto de sistemas
         else if(msg.terminarPartida){
 			mngr_->send<msg::GameOverMsg>(msg.ganador);
         }
+        //Si el mensaje es de volver al menu se comunica la vuelta al resto de sistemas
         else if(msg.backToMenu){
             mngr_->send<msg::Message>(msg::_ARRIVED_TO_MENU);
         }
+        //Si el mensaje es de actualizacion se actualizan las variables correspondientes del TronSystem
         else{
             TronSystem* tSystem = mngr_->getSystem<TronSystem>(ecs::SysId::_sys_Tron);
             tSystem->setEncasillado(msg.tablero);
@@ -47,6 +44,7 @@ void SocketSystem::listenMessages(){
     }
 }
 
+//Metodo llamado por otros sistemas para mandar un mensaje al servidor
 void SocketSystem::sendToServer(Serializable& obj){
 	socket.send(obj, socket);
 }

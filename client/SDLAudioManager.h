@@ -6,7 +6,7 @@
 #include <map>
 
 /*
- *
+ * Manager que se encarga de cargar los recursos relacionados con el sonido
  */
 class SDLAudioManager: public AudioManager {
 public:

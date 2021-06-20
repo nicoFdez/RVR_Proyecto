@@ -5,7 +5,7 @@
 using namespace std;
 
 /*
- *
+ * Manager encargado de administrar el audio de la aplicacion
  */
 class AudioManager {
 public:

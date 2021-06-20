@@ -1,6 +1,8 @@
 #pragma once
 #include <ctime>
 
+
+//NameSpace que almacena IDs relacionados con los sistemas y los componentes
 namespace ecs {
 	using CmpIdType = std::size_t;
 	using GrpIdType = std::size_t;

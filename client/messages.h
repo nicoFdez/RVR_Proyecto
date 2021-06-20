@@ -14,6 +14,8 @@ namespace msg {
 		_last_MsgId_
 	};
 
+
+	//Structs que se mandan entre sistemas para comunicar mensajes
 	struct Message {
 		Message(MsgId id) :
 			id(id) {

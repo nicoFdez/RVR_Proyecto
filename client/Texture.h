@@ -6,6 +6,10 @@
 
 using namespace std;
 
+
+/*
+* Clase auxiliar que nos sirve para manejar texturas en el juego
+*/
 class Texture {
 public:
 	Texture();
