@@ -1,10 +1,8 @@
 #pragma once
 
 #include <vector>
-#include "TronSystem.h"
-#include "SocketSystem.h"
 #include "Socket.h"
-#include "Serializable.h"
+#include "TronClientMessage.h"
 #include "TronServerMsg.h"
 #include <mutex>
 
@@ -64,10 +62,10 @@ private:
 	Socket* player2=nullptr;
 
 	//Ultima pulsacion realizada por el jugador 1
-	Key::keyType lastPressedP1 = Key::keyType::NONE;
+	TronClientMsg::MsgType lastPressedP1 = TronClientMsg::MsgType::NONE;
 
 	//Ultima pulsacion realizada por el jugador 2
-	Key::keyType lastPressedP2 = Key::keyType::NONE;
+	TronClientMsg::MsgType lastPressedP2 = TronClientMsg::MsgType::NONE;
 
 
     /*

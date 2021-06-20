@@ -1,5 +1,4 @@
 #include <thread>
-#include "Chat.h"
 #include "Tron.h"
 
 void start(const char * s, const char * p) {

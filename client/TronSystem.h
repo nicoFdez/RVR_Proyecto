@@ -3,8 +3,7 @@
 #include "System.h"
 #include "Transform.h"
 #include "Entity.h"
-#include "ImageComponent.h"
-#include "Serializable.h"
+#include "TronClientMessage.h"
 
 class TronSystem : public System {
 public:
@@ -56,9 +55,9 @@ private:
 	Entity* player2_;
 
 	//Ultima Key que ha pulsado el player
-	Key::keyType lastKeyPressed;
+	TronClientMsg::MsgType lastKeyPressed;
 
-	//Tamaño de la casilla de nuestro mapa
+	//Tamaï¿½o de la casilla de nuestro mapa
 	double tamCas;
 
 	//Vector que reresenta el mapa del juego

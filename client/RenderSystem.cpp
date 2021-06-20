@@ -4,7 +4,6 @@
 #include "AnimatedImageComponent.h"
 #include "ecs.h"
 #include "Manager.h"
-#include "ImageComponent.h"
 #include "SDL_macros.h"
 #include "SDLGame.h"
 #include "Transform.h"

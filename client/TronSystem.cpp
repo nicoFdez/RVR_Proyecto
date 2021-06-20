@@ -22,7 +22,7 @@ void TronSystem::init() {
 	encasillado = vector <vector<casilla>>(50, vector<casilla>(50, casilla()));
 
 	//Inicialmente el player n ha pulsado nada
-	lastKeyPressed = Key::keyType::NONE;
+	lastKeyPressed = TronClientMsg::MsgType::NONE;
 
 	//Establecemos posiciones de los Rects
 	for (int i = 0; i < encasillado.size(); i++) {
@@ -73,23 +73,23 @@ void TronSystem::update() {
 void TronSystem::inputManagement()
 {
 	//Se recoge la tecla pulsada por el jugador
-	lastKeyPressed = Key::keyType::NONE;
+	lastKeyPressed = TronClientMsg::MsgType::NONE;
 	auto ih = InputHandler::instance();
 	if (ih->keyDownEvent()) {
 		if (ih->isKeyDown(SDLK_RIGHT)) {
-			lastKeyPressed = Key::keyType::RIGHT;
+			lastKeyPressed = TronClientMsg::MsgType::RIGHT;
 		}
 		else if (ih->isKeyDown(SDLK_LEFT)) {
-			lastKeyPressed = Key::keyType::LEFT;
+			lastKeyPressed = TronClientMsg::MsgType::LEFT;
 		}
 		else if (ih->isKeyDown(SDLK_UP)) {
-			lastKeyPressed = Key::keyType::UP;
+			lastKeyPressed = TronClientMsg::MsgType::UP;
 		}
 		else if (ih->isKeyDown(SDLK_DOWN)) {
-			lastKeyPressed = Key::keyType::DOWN;
+			lastKeyPressed = TronClientMsg::MsgType::DOWN;
 		}
 		//Mandar mensaje con tecla pulsada
-		Key message(lastKeyPressed);
+		TronClientMsg message(lastKeyPressed);
  		mngr_->getSystem<SocketSystem>(ecs::SysId::_sys_Socket)->sendToServer(message);	
 	}
 }

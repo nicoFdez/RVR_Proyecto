@@ -4,7 +4,7 @@
 #include <thread>
 
 //Tiempo entre actualizaciones del juego
-#define TICKRATE 500000
+#define TICKRATE 200000
 
 using namespace std;
 
@@ -37,20 +37,18 @@ void TronSimulation::initGame() {
 
 void TronSimulation::run() {
 
-	//Mientras haya jugadores en el server continuamos
-	while(!(player1 == nullptr && player2 == nullptr)){
+	while(true){
+
+		playerInputMutex.lock();
+		proccessP1Input();
+		proccessP2Input();
+		playerInputMutex.unlock();
 
 		//Solo continuamos la partida si ambos jugadores estan conectados correctamente
 		if(!(player1 == nullptr || player2 == nullptr)){
-			usleep(TICKRATE);
-
-			playerInputMutex.lock();
-			proccessP1Input();
-			proccessP2Input();
-			playerInputMutex.unlock();
-
 			if(state == State::RUNNING)
 				simulate();
+			usleep(TICKRATE);
 		}
 	}
 }
@@ -61,7 +59,7 @@ void TronSimulation::waitForPlayers(){
 	while(player1 == nullptr || player2 == nullptr){
 		//Esperar a que alguien ocupe el puesto del player1
 		while(player1 == nullptr){
-			Key receptor;
+			TronClientMsg receptor;
 			Socket* nuevo;   
 			mySocket.recv(receptor,nuevo);
 			if(receptor.connect){
@@ -75,7 +73,7 @@ void TronSimulation::waitForPlayers(){
 
 		//Esperar a que alguien ocupe el puesto del player2
 		while(player2 == nullptr){
-			Key receptor;
+			TronClientMsg receptor;
 			Socket* nuevo;   
 			mySocket.recv(receptor,nuevo);
 			if(receptor.connect){
@@ -153,45 +151,53 @@ bool TronSimulation::checkCollision(Vector2D pos)
 void TronSimulation::proccessP1Input(){
 
 	//En caso de que haya inpt del player1
-	if(lastPressedP1 != Key::keyType::NONE){
+	if(lastPressedP1 != TronClientMsg::MsgType::NONE){
 		switch (lastPressedP1){
 
 			//Actualizamos direcciones
-			case Key::keyType::UP:{
-				rotP1=0;
-				dirP1.setX(0);
-				dirP1.setY(-1);
+			case TronClientMsg::MsgType::UP:{
+				if(state == State::RUNNING){
+					rotP1=0;
+					dirP1.setX(0);
+					dirP1.setY(-1);
+				}
 			break;
 			}
-			case Key::keyType::DOWN:{
-				rotP1=180;
-				dirP1.setX(0);
-				dirP1.setY(1);
+			case TronClientMsg::MsgType::DOWN:{
+				if(state == State::RUNNING){
+					rotP1=180;
+					dirP1.setX(0);
+					dirP1.setY(1);
+				}
 			break;
 			}
-			case Key::keyType::LEFT:{
-				rotP1=270;
-				dirP1.setX(-1);
-				dirP1.setY(0);
+			case TronClientMsg::MsgType::LEFT:{
+				if(state == State::RUNNING){
+					rotP1=270;
+					dirP1.setX(-1);
+					dirP1.setY(0);
+				}
 			break;
 			}
-			case Key::keyType::RIGHT:{
-				rotP1=90;
-				dirP1.setX(1);
-				dirP1.setY(0);
+			case TronClientMsg::MsgType::RIGHT:{
+				if(state == State::RUNNING){
+					rotP1=90;
+					dirP1.setX(1);
+					dirP1.setY(0);
+				}
 			break;
 			}
 			
 			//Si detectamos en enter y no estamos en el estado RUNNING realizamos la transicion correcta
-			case Key::keyType::ENTER:{
-				if(state == State::READY){
+			case TronClientMsg::MsgType::ENTER:{
+				if((player1 != nullptr && player2 != nullptr) && state == State::READY){
 					state = State::RUNNING;
 					TronServerMsg inicio; 
 					inicio.empezarPartida = true;
 					mySocket.send(inicio,*player1);
 					mySocket.send(inicio,*player2);
 				}
-				else if(state == State::OVER){
+				else if((player1 != nullptr && player2 != nullptr) && state == State::OVER){
 					state = State::READY;
 					TronServerMsg reinicio; 
 					reinicio.backToMenu = true;
@@ -202,8 +208,9 @@ void TronSimulation::proccessP1Input(){
 			}
 
 			//En caso de esc el player se ha ido y colvemos al menu
-			case Key::keyType::ESC:{
+			case TronClientMsg::MsgType::ESC:{
 				player1 = nullptr;
+				cout<<"Player1 e ha ido \n";
 				state = State::READY;
 				TronServerMsg menu; 
 				menu.backToMenu = true;
@@ -213,52 +220,60 @@ void TronSimulation::proccessP1Input(){
 			break;
 			}
 		}
-	lastPressedP1 = Key::keyType::NONE;
+	lastPressedP1 = TronClientMsg::MsgType::NONE;
 	}
 }
 
 void TronSimulation::proccessP2Input(){
 
 	//En caso de que haya inpt del player2
-	if(lastPressedP2 != Key::keyType::NONE){
+	if(lastPressedP2 != TronClientMsg::MsgType::NONE){
 		switch (lastPressedP2){
 
 			//Actualizamos direcciones
-			case Key::keyType::UP:{
+			case TronClientMsg::MsgType::UP:{
+				if(state == State::RUNNING){
 				rotP2=0;
 				dirP2.setX(0);
 				dirP2.setY(-1);
+				}
 			break;
 			}
-			case Key::keyType::DOWN:{
-				rotP2=180;
-				dirP2.setX(0);
-				dirP2.setY(1);
+			case TronClientMsg::MsgType::DOWN:{
+				if(state == State::RUNNING){
+					rotP2=180;
+					dirP2.setX(0);
+					dirP2.setY(1);
+				}
 			break;
 			}
-			case Key::keyType::LEFT:{
-				rotP2=270;
-				dirP2.setX(-1);
-				dirP2.setY(0);
+			case TronClientMsg::MsgType::LEFT:{
+				if(state == State::RUNNING){
+					rotP2=270;
+					dirP2.setX(-1);
+					dirP2.setY(0);
+				}
 			break;
 			}
-			case Key::keyType::RIGHT:{
-				rotP2=90;
-				dirP2.setX(1);
-				dirP2.setY(0);
+			case TronClientMsg::MsgType::RIGHT:{
+				if(state == State::RUNNING){
+					rotP2=90;
+					dirP2.setX(1);
+					dirP2.setY(0);
+				}
 			break;
 			}
 
 			//Si detectamos en enter y no estamos en el estado RUNNING realizamos la transicion correcta
-			case Key::keyType::ENTER:{
-				if(state == State::READY){
+			case TronClientMsg::MsgType::ENTER:{
+				if((player1 != nullptr && player2 != nullptr) && state == State::READY){
 					state = State::RUNNING;
 					TronServerMsg inicio; 
 					inicio.empezarPartida = true;
 					mySocket.send(inicio,*player1);
 					mySocket.send(inicio,*player2);
 				}
-				else if(state = State::OVER){
+				else if((player1 != nullptr && player2 != nullptr) && state == State::OVER){
 					state = State::READY;
 					TronServerMsg reinicio; 
 					reinicio.backToMenu = true;
@@ -269,8 +284,9 @@ void TronSimulation::proccessP2Input(){
 			}
 
 			//En caso de esc el player se ha ido y colvemos al menu
-			case Key::keyType::ESC:{
+			case TronClientMsg::MsgType::ESC:{
 				player2 = nullptr;
+				cout<<"Player2 e ha ido \n";
 				state = State::READY;
 				TronServerMsg menu; 
 				menu.backToMenu = true;
@@ -280,7 +296,7 @@ void TronSimulation::proccessP2Input(){
 			break;
 			}
 		}	
-		lastPressedP2 = Key::keyType::NONE;
+		lastPressedP2 = TronClientMsg::MsgType::NONE;
 	}
 }
 
@@ -289,7 +305,7 @@ void TronSimulation::net_thread(){
 	while(true)
     {
 		//Recibimos un mensaje de algun cliene
-        Key msg;
+        TronClientMsg msg;
         Socket* nuevo = (Socket*)&msg;    
         mySocket.recv(msg,nuevo);
 
@@ -301,8 +317,9 @@ void TronSimulation::net_thread(){
 				if(player2 != nullptr && !(*nuevo == *player2)){
 					player1 = nuevo;
 				}
-				else if(player2 == nullptr)
+				else if(player2 == nullptr){
 					player1 = nuevo;
+				}
 			}
 
 			//Lo ponemos en el lugar del player2
@@ -310,8 +327,9 @@ void TronSimulation::net_thread(){
 				if(player1 != nullptr && !(*nuevo == *player1)){
 					player2 = nuevo;
 				}
-				else if(player1 == nullptr)
+				else if(player1 == nullptr){
 					player2 = nuevo;
+				}
 			}
 		}
 
@@ -319,10 +337,10 @@ void TronSimulation::net_thread(){
 		else{
 			playerInputMutex.lock();
 			if(player1 != nullptr && *nuevo == *player1){
-				lastPressedP1 = msg.key;
+				lastPressedP1 = msg.msg;
 			}
 			else if(player2 != nullptr && *nuevo == *player2){
-				lastPressedP2 = msg.key;
+				lastPressedP2 = msg.msg;
 			}
 			playerInputMutex.unlock();
 		}
@@ -348,13 +366,13 @@ void TronSimulation::resetPlayers(){
 	dirP1.setX(1);
 	dirP1.setY(0);
 	rotP1= 90;
-	lastPressedP1 = Key::keyType::NONE;
+	lastPressedP1 = TronClientMsg::MsgType::NONE;
 
 	//Informacion del player2
 	posP2= Vector2D(50*3/4 , 50*3/4);
 	dirP2.setX(-1);
 	dirP2.setY(0);
 	rotP2 = 270;
-	lastPressedP2 = Key::keyType::NONE;
+	lastPressedP2 = TronClientMsg::MsgType::NONE;
 
 }
